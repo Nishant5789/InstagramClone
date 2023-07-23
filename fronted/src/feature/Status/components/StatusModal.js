@@ -1,4 +1,10 @@
 import React from 'react'
+import RightArrow from '../../../assets/icons/angle-double-right.png'
+import LeftArrow from '../../../assets/icons/angle-double-left.png'
+import StatusPic from '../../../assets/icons/nushrat.jpg'
+import SendMsg from '../../../assets/icons/sendMsg.png'
+import Sampleavatar from '../../../assets/icons/Sampleavatar.png'
+
 
 const StatusModal = () => {
   return (
@@ -24,7 +30,6 @@ const StatusModal = () => {
         <div className='m-auto col-span-2'>
             <img src={RightArrow} alt="" className='w-10 h-10'/>
         </div>
-
     </div>
     </div>
   )
