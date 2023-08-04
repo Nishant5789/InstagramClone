@@ -11,7 +11,7 @@ const SinglePost = () => {
     return (
         <div className='sm:w-2/3  mx-auto rounded-lg'>  
             <div className='flex items-center  py-2 px-4 gap-x-2'>
-                <img src={Sampleavatar} className='w-16 h-16' alt="" />
+                <img src={Sampleavatar} className='w-16  h-16' alt="" />
                 <h1>Nishant123</h1>
                 <p className='text-sm flex-grow'>4h</p>
                 <span>&#183; &#183; &#183;</span>

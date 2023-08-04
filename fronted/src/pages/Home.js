@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../feature/Navbar/components/Navbar'
+import Navbar from '../Components/Navbar'
 import Status from '../feature/Status/components/Status'
 import Posts from '../feature/Post/components/Posts'
 
