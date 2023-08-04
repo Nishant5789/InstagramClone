@@ -1,13 +1,13 @@
 import React from 'react'
-import SearchIcon from '../../../assets/icons/searchNavbar.png'
-import instagramLogo from '../../../assets/icons/instagramLogo.png'
-import HeartLogo from '../../../assets/icons/heartLogo.png'
-import HomeLogo from '../../../assets/icons/HomeLogo.png'
-import Reellogo from '../../../assets/icons/Reellogo.png'
-import searchNavbar from '../../../assets/icons/searchNavbar.png'
-import ChatLogo from '../../../assets/icons/ChatLogo.png'
-import AddLogo from '../../../assets/icons/AddLogo.png'
-import Sampleavatar from '../../../assets/icons/Sampleavatar.png'
+import SearchIcon from '../assets/icons/searchNavbar.png'
+import instagramLogo from '../assets/icons/instagramLogo.png'
+import HeartLogo from '../assets/icons/heartLogo.png'
+import HomeLogo from '../assets/icons/HomeLogo.png'
+import Reellogo from '../assets/icons/Reellogo.png'
+import searchNavbar from '../assets/icons/searchNavbar.png'
+import ChatLogo from '../assets/icons/ChatLogo.png'
+import AddLogo from '../assets/icons/AddLogo.png'
+import Sampleavatar from '../assets/icons/Sampleavatar.png'
 
 const Navbar = () => {
   return (
