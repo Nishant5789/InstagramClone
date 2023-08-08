@@ -2,6 +2,9 @@ import React from 'react'
 import Navbar from '../Components/Navbar'
 import Status from '../feature/Status/components/Status'
 import Posts from '../feature/Post/components/Posts'
+import Notificationpanel from '../feature/Notification/components/Notificationpanel'
+import FollowRequest from '../feature/Notification/components/FollowRequest'
+import { Route, Routes } from 'react-router-dom'
 
 
 
@@ -11,7 +14,13 @@ const Home = () => {
       <Navbar />
       <div className='lg:col-span-6 col-span-11  border-2'>
         <Status />
-        <Posts/>
+        <Routes>
+          <Route>
+            <Route index element={<Posts />} />
+            <Route path="/Notification" element={<Notificationpanel />} />
+            <Route path="/Followrequest" element={<FollowRequest />} />
+          </Route>
+        </Routes>
       </div>
       <div className='lg:col-span-4 hidden lg:block border-purple-600 border-2'>nishant</div>
     </div>
