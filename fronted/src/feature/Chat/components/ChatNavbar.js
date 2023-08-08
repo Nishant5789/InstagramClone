@@ -32,10 +32,12 @@ const ChatNavbar = () => {
           <img src={ChatLogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden '>Messages</h1>
         </li>
+        <Link to="/Notification">
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2  justify-center   items-center '>
           <img src={HeartLogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden '>Notifications</h1>
         </li>
+        </Link>
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2  justify-center   items-center '>
           <img src={AddLogo} className='w-10 h-10 ' alt="" />
         </li>

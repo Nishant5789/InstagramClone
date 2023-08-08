@@ -9,6 +9,7 @@ import ChatLogo from '../assets/icons/ChatLogo.png'
 import AddLogo from '../assets/icons/AddLogo.png'
 import Sampleavatar from '../assets/icons/Sampleavatar.png'
 import { Link } from 'react-router-dom'
+import NotificationModel from '../feature/Notification/components/Notificationpanel'
 
 const Navbar = () => {
   return (
@@ -69,10 +70,12 @@ const Navbar = () => {
           <h1 className='font-bold hidden lg:block'>Messages</h1>
         </li>
         </Link> 
+        <Link to='/Notification'>
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={HeartLogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Notifications</h1>
         </li>
+        </Link>
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={AddLogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Create</h1>
