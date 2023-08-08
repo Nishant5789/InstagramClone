@@ -7,6 +7,7 @@ import searchNavbar from '../../../assets/icons/searchNavbar.png'
 import ChatLogo from '../../../assets/icons/ChatLogo.png'
 import AddLogo from '../../../assets/icons/AddLogo.png'
 import Sampleavatar from '../../../assets/icons/Sampleavatar.png'
+import { Link } from 'react-router-dom'
 
 
 const ChatNavbar = () => {
@@ -16,9 +17,11 @@ const ChatNavbar = () => {
       <img src={instagramLogo} className='w-10 h-10' alt="" />
       </div>
       <ul className=''>  
+      <Link to="/">
         <li className='flex hover:bg-gray-200  rounded-xl mx-2  py-2  justify-center  items-center '>
           <img src={HomeLogo} className='w-10 h-10 ' alt="" />
         </li>
+      </Link>
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2  justify-center   items-center '>
           <img src={searchNavbar} className='w-10 h-10 ' alt="" />
         </li>

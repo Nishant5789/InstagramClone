@@ -8,6 +8,7 @@ import searchNavbar from '../assets/icons/searchNavbar.png'
 import ChatLogo from '../assets/icons/ChatLogo.png'
 import AddLogo from '../assets/icons/AddLogo.png'
 import Sampleavatar from '../assets/icons/Sampleavatar.png'
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   return (
@@ -48,10 +49,12 @@ const Navbar = () => {
       <img className='hidden lg:flex' src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" alt="" />
       </div>
       <ul className='flex-grow'>  
+      <Link to="/">
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center lg:justify-normal items-center gap-x-4'>
           <img src={HomeLogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Home</h1>
         </li>
+      </Link>
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={searchNavbar} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Search</h1>
@@ -60,10 +63,12 @@ const Navbar = () => {
           <img src={Reellogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Reels</h1>
         </li>
+        <Link to="/chat">
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={ChatLogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Messages</h1>
         </li>
+        </Link> 
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={HeartLogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Notifications</h1>
