@@ -3,6 +3,7 @@ import { fetchPosts } from './postApi';
 
 const initialState = {
     status: 'idle',
+    posts: [],
 };
 
 export const fetchPostAsync = createAsyncThunk('post/fetchPost', async () => {
@@ -24,10 +25,12 @@ export const postSlice = createSlice({
         })
         .addCase(fetchPostAsync.fulfilled, (state, action) => {
           state.status = 'idle';
-          state.brands = action.payload;
+          state.posts = action.payload;
         });
       },
     });
+
+export const selectposts = (state)=>state.post.posts;
 
 
 export default postSlice.reducer;
