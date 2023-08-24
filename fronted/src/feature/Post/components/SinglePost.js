@@ -6,18 +6,19 @@ import SendMsg from '../../../assets/icons/sendMsg.png'
 import Commenticon from '../../../assets/icons/Commenticon.png'
 import SaveInstagram from '../../../assets/icons/save-instagram.png'
 
+const SinglePost = ({post}) => {
+    const {Username, PostPath} = post;
 
-const SinglePost = () => {
     return (
         <div className='sm:w-2/3  mx-auto rounded-lg'>  
             <div className='flex items-center  py-2 px-4 gap-x-2'>
                 <img src={Sampleavatar} className='w-16  h-16' alt="" />
-                <h1>Nishant123</h1>
+                <h1>{Username}</h1>
                 <p className='text-sm flex-grow'>4h</p>
                 <span>&#183; &#183; &#183;</span>
             </div>
-            <div className='h-3/4'>
-                <img src={StatusPic} alt="" />
+            <div className='h-3/4  flex justify-center bg-slate-100'>
+                <img src={PostPath} alt="" className='' />
             </div>
             <ul className='flex  mt-2 px-4 gap-x-2'>
                 <li >
