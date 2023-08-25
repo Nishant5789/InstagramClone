@@ -47,7 +47,7 @@ app.get('/', (req, res) => {
 
 
 // handle routes 
-app.use("/api/users",require("./routes/userRoutes"));
+app.use("/api/user",require("./routes/userRoutes"));
 app.use('/auth', authRoute);
 
 app.use(errorHandler);
