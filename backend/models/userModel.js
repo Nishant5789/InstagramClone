@@ -8,11 +8,11 @@ const userSchema = mongoose.Schema({
         },
         FirstName: {
             type: String,
-            required: [true, " Please add your Firstname. "],
+            //required: [true, " Please add your Firstname. "],
         },
         LastName: {
             type: String,
-            required: [true, " Please add your Lastname. "],
+            //required: [true, " Please add your Lastname. "],
         },
         ProfilePhoto: {
             type: String,
@@ -20,14 +20,14 @@ const userSchema = mongoose.Schema({
         },
         Gender: {
             type: String,
-            required: [true, " Please add mention your Gender. "]
+            //required: [true, " Please add mention your Gender. "]
         },
         Bio: {
             type: String
         },
         DoB: {
             type: Date,
-            required: [true, " Please add your birthdate. "]
+            //required: [true, " Please add your birthdate. "]
         },
         Email: {
             type: String,
@@ -40,7 +40,7 @@ const userSchema = mongoose.Schema({
         },
         AccType: {
             type: String,
-            required: [true, "Please define your account type. "]
+            
         },
         AllPostPath:{
             type: [String],
