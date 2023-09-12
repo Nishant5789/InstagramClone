@@ -53,7 +53,9 @@ app.get('/', (req, res) => {
 app.use("/api/user",require("./routes/userRoutes"));
 app.use('/auth', authRoute);
 app.use('/api/post',require("./routes/postRoutes"));
-//app.use(errorHandler);
+app.use('/api/chat',require("./routes/chatRoutes"));
+app.use('/api/story',require("./routes/storyRoutes"));
+app.use(errorHandler);
 
 passport.use(new LocalStrategy(
     { usernameField: 'email' },

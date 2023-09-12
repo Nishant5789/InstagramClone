@@ -73,8 +73,12 @@ const userSchema = mongoose.Schema({
         IsCurrentstory :{
             type: Boolean
         },
-        CurrentStoryType:{
+        /*CurrentStoryType:{
             type: String
+        },*/
+        Story: {
+            type: [ObjectId],
+            ref: "Story"
         },
         ArchiveStory:{
             type: [ObjectId],

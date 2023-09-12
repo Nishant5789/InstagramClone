@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {getChats/*,createPost,commentPost,deletePost,likePost*/} = require("../controllers/chatControllers");
 
-router.route("/:UserId").get(getPosts);
+router.route("/:UserId").get(getChats);
 /*
 router.route("/like/:UserId/:PostId").put(likePost);
 
