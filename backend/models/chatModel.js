@@ -1,7 +1,7 @@
 const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 
-const messageSchema = mongoose.Schema(
+const chatSchema = mongoose.Schema(
     {
         ChatId: {
             type: String,
@@ -22,4 +22,4 @@ const messageSchema = mongoose.Schema(
     }  
 );
 
-module.exports = mongoose.model("Message", messageSchema)
+module.exports = mongoose.model("Chat", chatSchema)

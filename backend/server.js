@@ -17,6 +17,9 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
 
+//connecting to database
+connectDb();
+
 // import routes
 const authRoute = require('./routes/auth');
 const { sanitizeUser, isAuth, cookieExtractor } = require('./services/common');
@@ -29,7 +32,7 @@ opts.jwtFromRequest = cookieExtractor;
 opts.secretOrKey = SECRET_KEY;
 
 
-connectDb();
+
 app.use(express.json());
 app.use(session({
     secret: 'keyboard cat',
@@ -49,8 +52,8 @@ app.get('/', (req, res) => {
 // handle routes 
 app.use("/api/user",require("./routes/userRoutes"));
 app.use('/auth', authRoute);
-
-app.use(errorHandler);
+app.use('/api/post',require("./routes/postRoutes"));
+//app.use(errorHandler);
 
 passport.use(new LocalStrategy(
     { usernameField: 'email' },

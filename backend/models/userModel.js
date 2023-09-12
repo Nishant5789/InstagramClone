@@ -40,10 +40,10 @@ const userSchema = mongoose.Schema({
         },
         AccType: {
             type: String,
-            
+            ref: "Post"
         },
-        AllPostPath:{
-            type: [String],
+        AllPost:{
+            type: [ObjectId],
 
         },
         FollowingUser:{

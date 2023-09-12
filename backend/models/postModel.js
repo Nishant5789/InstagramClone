@@ -5,7 +5,7 @@ const postSchema = mongoose.Schema(
     {
         PostType: {
             type: String,
-
+            required: [true, "Post type must be mentioned."]
         },
         Comment: {
             type: [ObjectId],
@@ -13,6 +13,7 @@ const postSchema = mongoose.Schema(
         },
         PostPath: {
             type: String,
+            required: [true, "Post path must be mentioned."]
         },
         TaggedUser:{
             type: [ObjectId],
@@ -20,7 +21,8 @@ const postSchema = mongoose.Schema(
         },
         UserId: {
             type: ObjectId,
-            ref: "User"
+            ref: "User",
+            required: [true, "Please mention user. "]
         },
         LikedByUsers: {
             type: [ObjectId],
