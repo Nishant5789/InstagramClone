@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const {getChats/*,createPost,commentPost,deletePost,likePost*/} = require("../controllers/chatControllers");
+const {getAllChats,addChatMessage,getchat} = require("../controllers/chatControllers");
 
-router.route("/:UserId").get(getChats);
+router.route("/:UserId").get(getAllChats);
 /*
 router.route("/like/:UserId/:PostId").put(likePost);
 

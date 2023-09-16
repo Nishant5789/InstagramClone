@@ -7,7 +7,7 @@ const Request = require("../models/requestModel");
 //@route GET /api/request/:UserId
 //@acsess public 
 const getRequests = asyncHandler( async (req,res) => {
-    const requests = await Request.findById(RequestReciverUser = req.params.UserId).sort(timestams);
+    const requests = await Request.findById(RequestReciverUser = req.params.UserId).sort(timestamps);
     res.status(200).json(requests);
 });
 
@@ -16,32 +16,33 @@ const getRequests = asyncHandler( async (req,res) => {
 //@route POST /api/request/:UserId/:ReciverId/createpost
 //@acsess public 
 const createRequest = asyncHandler(async (req,res) => {
-    console.log("The request body is : ",req.body);
-    const {Msg} = req.body;
 
-    /*if(!PostType || !Postpath )
-    {
-        res.status(400);
-        throw new Error("All fields are required.");
-    }*/
+    try {
+        console.log("The request body is : ",req.body);
+        const {Msg} = req.body;
+        
+        const request1 = await Request.create({
+            ReuestSenderUser: req.params.UserId,
+            RequestReciverUser: req.params.ReciverId,
+            IsFollowback: false,
+            StatusRequest: "Pending",
+            Msg: Msg,
+        });
+        
+        const user1 = await User.findByIdAndUpdate(req.params.ReciverId,
+            {
+                $push: { Request: request1._id }, // Add the new postid to the AllPost array
+            },
+            { new: true }
+        );
+        console.log(user1);
 
-    const request1 = await Request.create({
-        ReuestSenderUser: req.params.UserId,
-        RequestReciverUser: req.params.ReciverId,
-        IsFollowback: false,
-        StatusRequest: "Pending",
-        Msg: Msg,
-    });
+        res.status(201).json(request1);
+
+    } catch (error) {
+        console.log(error);
+    }
     
-    const user1 = await User.findByIdAndUpdate(req.params.ReciverId,
-        {
-            $push: { Request: request1._id }, // Add the new postid to the AllPost array
-        },
-        { new: true }
-    );
-    console.log(user1);
-
-    res.status(201).json(request1);
 });
 
 //@dec update a request
@@ -97,26 +98,4 @@ const deletePost = asyncHandler( async (req,res) => {
 });
 */
 
-/*
-//@dec get a user
-//@route GET /api/post/:id
-//@acsess public
-const getPost = asyncHandler( async (req,res) => {
-    const post1 = await Post.findById(req.params.id);
-
-    if(!post1)
-    {
-        res.status(404);
-        throw new Error("User not found.");
-    }
-
-    res.status(200).json(user);
-});
-*/
-
-/*
-
-*/
-
-
-module.exports = {getRequests,createRequest,updateRequest,};
+module.exports = {getRequests,createRequest,updateRequest};

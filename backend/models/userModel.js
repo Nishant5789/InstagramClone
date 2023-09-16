@@ -40,11 +40,11 @@ const userSchema = mongoose.Schema({
         },
         AccType: {
             type: String,
-            ref: "Post"
+            
         },
         AllPost:{
             type: [ObjectId],
-
+            ref: "Post"
         },
         FollowingUser:{
             type : [mongoose.Schema.Types.ObjectId],
