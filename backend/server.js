@@ -55,7 +55,7 @@ app.use('/auth', authRoute);
 app.use('/api/post',require("./routes/postRoutes"));
 app.use('/api/chat',require("./routes/chatRoutes"));
 app.use('/api/story',require("./routes/storyRoutes"));
-
+app.use('/api/request',require("./routes/requestRoutes"));
 
 passport.use(new LocalStrategy(
     { usernameField: 'email' },
