@@ -1,44 +1,92 @@
+const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
-        Username: {
+        UserName: {
             type: String,
-            required: [true, " Please add your name. "],
+            required: [true, " Please add your username. "],
         },
-        /*Gender: {
+        FirstName: {
             type: String,
-            required: [true, " Please add mention your Gender. "]
+            //required: [true, " Please add your Firstname. "],
         },
-        Bio: {
+        LastName: {
+            type: String,
+            //required: [true, " Please add your Lastname. "],
+        },
+        ProfilePhoto: {
             type: String,
 
         },
+        Gender: {
+            type: String,
+            //required: [true, " Please add mention your Gender. "]
+        },
+        Bio: {
+            type: String
+        },
         DoB: {
-            type: timestamp,
-            required: [true, " Please add your birthdate. "]
+            type: Date,
+            //required: [true, " Please add your birthdate. "]
         },
-        AccType: {
+        Email: {
             type: String,
-            required: [true, "Please define your account type. "]
+            required: [true, " Please add your email. "],
+            unique: [true,"Email address already taken. "]
         },
-        currentStatus: {
-            type: String,
-            
-        },
-        currentStatusType: {
-            type: String,
-        },*/
-        email: {
-            type: String,
-            required: [true, " Please add your email. "]
-        },
-        password: {
+        Password: {
             type: String,
             required: [true, " Please add your password. "]
         },
+        AccType: {
+            type: String,
+            
+        },
+        AllPost:{
+            type: [ObjectId],
+            ref: "Post"
+        },
+        FollowingUser:{
+            type : [mongoose.Schema.Types.ObjectId],
+            ref : "User",
+        },
+        BlockedUser:{
+            type : [mongoose.Schema.Types.ObjectId],
+            ref : "User",
+        },
+        FollowersUser :{
+            type : [mongoose.Schema.Types.ObjectId],
+            ref : "User",
+        },
+        Tagged: {
+            type: [ObjectId],
+            ref: "Post"
+        },
+        Request : {
+            type: [ObjectId],
+            ref: "Request"
+        },
+        SavedUser: {
+            type: [ObjectId],
+            ref: "User"
+        },
+        IsCurrentstory :{
+            type: Boolean
+        },
+        /*CurrentStoryType:{
+            type: String
+        },*/
+        Story: {
+            type: [ObjectId],
+            ref: "Story"
+        },
+        ArchiveStory:{
+            type: [ObjectId],
+            ref: "Story"
+        },
     },
     {
-        timestamp: true,
+        timestamps: true,
     }
 );
 
