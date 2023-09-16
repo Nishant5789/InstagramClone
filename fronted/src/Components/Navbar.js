@@ -83,10 +83,12 @@ const Navbar = () => {
           <img src={AddLogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Create</h1>
         </li>
+        <Link to="/Profile">
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={Sampleavatar} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Profile</h1>
         </li>
+        </Link>
       </ul>
       <div className='hidden lg:block  p-4'>
         <h1 className='font-bold text-center text-2xl'>More</h1>

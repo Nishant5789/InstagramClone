@@ -33,7 +33,7 @@ const Profile = () => {
             <li className='text-center p-2 rounded-md '>Reels</li>
             <li className='text-center p-2 rounded-md '>Tags</li>
           </ul>
-          <div className='grid grid-cols-3 p-2 gap-2'>
+          <div className='grid grid-cols-3 p-2 place-items-center gap-2'>
             <div className='w-28 h-28 md:h-48 md:w-48 border-2'>nishant1</div>
             <div className='w-28 h-28 md:h-48 md:w-48 border-2'>nishant1</div>
             <div className='w-28 h-28 md:h-48 md:w-48 border-2'>nishant1</div>

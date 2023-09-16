@@ -6,6 +6,7 @@ import Notificationpanel from '../feature/Notification/components/Notificationpa
 import FollowRequest from '../feature/Notification/components/FollowRequest'
 import { Route, Routes, json, useParams } from 'react-router-dom'
 import Profile from '../feature/Profile/components/Profile'
+import Search from '../feature/Search/components/Search'
 
 
 
@@ -33,6 +34,7 @@ const Home = () => {
             <Route path="/Notification" element={<Notificationpanel />} />
             <Route path="/Followrequest" element={<FollowRequest />} />
             <Route path="/Profile" element={<Profile />} />
+            <Route path="/Search" element={<Search />} />
           </Route>
         </Routes>
       </div>
