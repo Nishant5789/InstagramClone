@@ -52,7 +52,7 @@ const updateRequest = asyncHandler(async (req,res) => {
     const request1 = await Request.findById(req.params.RequestId);
     if(!request1)
     {
-        res.status(404);
+        res.status(404).json({msg: 'Request not found'});
         throw new Error("request not found.");
     }
 

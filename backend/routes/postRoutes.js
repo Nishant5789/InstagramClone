@@ -7,7 +7,7 @@ router.route("/:UserId").get(getPosts);
 
 router.route("/like/:UserId/:PostId").put(likePost);
 
-router.route("/:UserId/createpost").post(createPost);
+router.route("/createpost/:UserId").post(createPost);
 
 router.route("/:UserId/:PostId").delete(deletePost);
 

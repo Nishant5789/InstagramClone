@@ -5,13 +5,7 @@ const User = require("../models/userModel");
 const Comment = require("../models/commentModel");
 const Chat = require("../models/chatModel");
 
-//@dec Get all chats
-//@route GET /api/chat/:Userid
-//@acsess public 
-const getAllChats = asyncHandler( async (req,res) => {
-    const chats = await Chat.find(SenderUserId = req.params.UserId).sort(timestamps);
-    res.status(200).json(chats);
-});
+
 
 //@dec add a chat
 //@route POST /api/chat/:Chatid/
@@ -26,9 +20,9 @@ const addChatMessage = asyncHandler( async (req,res) => {
             ContentMessage: req.body.ContentMessage,
             ContentType: req.body.ContentType
         })
+        // console.log(newChat._id.toString());
             
-        const addChat = Chat.findById(newChat._id);
-    
+        const addChat = await Chat.findById(newChat._id.toString());
         res.status(200).json(addChat);
             
     } catch (error) {
@@ -43,13 +37,19 @@ const addChatMessage = asyncHandler( async (req,res) => {
 const getchat = asyncHandler( async (req,res) => {
 
     try{
-        const chat = await Chat.findById(req.params.ChatId);
+        console.log(req.params.chatId);
+        const chat = await Chat.find({ChatId:req.params.chatId});
 
-        res.status(200).json(chat);
+        if(chat){
+            res.status(200).json(chat);
+        }
+        else{
+            res.status(400).json({"msg": "chat not found"});
+        }   
     }
     catch(error){
         console.log(error);
     }
 });
 
-module.exports = {getAllChats,addChatMessage,getchat};
+module.exports = {addChatMessage,getchat};

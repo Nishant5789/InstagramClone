@@ -9,7 +9,7 @@ const postSchema = mongoose.Schema(
         },
         Comment: {
             type: [ObjectId],
-            ref: "User"
+            ref: "Comment"
         },
         PostPath: {
             type: String,

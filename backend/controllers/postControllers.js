@@ -10,13 +10,13 @@ const e = require("express");
 //@route GET /api/post/:UserId
 //@acsess public 
 const getPosts = asyncHandler( async (req,res) => {
-    const posts = await Post.findById(UserId = req.params.UserId).sort(timestamps);
+    const posts = await Post.find({UserId : req.params.UserId}).populate("Comment");
     res.status(200).json(posts);
 });
 
 
 //@dec Create new post
-//@route POST /api/post/:UserId/createpost
+//@route POST /api/post/createpost/:UserId
 //@acsess public 
 const createPost = asyncHandler(async (req,res) => {
 
@@ -63,14 +63,14 @@ const deletePost = asyncHandler( async (req,res) => {
         const user = await User.findById(req.params.UserId);
         if(!user)
         {
-            res.status(404);
+            res.status(400).json({msg:"User not found."});
             throw new Error("User not found.");
         }
 
         const post1 = await Post.findById(req.params.PostId);
         if(!post1)
         {
-            res.status(404);
+            res.status(400).json({msg:"Post not found."});
             throw new Error("Post not found.");
         }
 
@@ -102,21 +102,21 @@ const commentPost = asyncHandler( async (req,res) => {
 
         if(!Commentcontent )
         {
-            res.status(400);
+            res.status(400).json({msg:"All fields are required."});
             throw new Error("All fields are required.");
         }
 
         const user = await User.findById(req.params.UserId);
         if(!user)
         {
-            res.status(404);
+            res.status(404).json({msg:"User not found."});;;
             throw new Error("User not found.");
         }
 
         const post1 = await Post.findById(req.params.PostId);
         if(!post1)
         {
-            res.status(404);
+            res.status(404).json({msg:"Post not found."});;;
             throw new Error("Post not found.");
         }
         
@@ -150,20 +150,19 @@ const likePost = asyncHandler( async (req,res) => {
         const user = await User.findById(req.params.UserId);
         if(!user)
         {
-            res.status(404);
-            throw new Error("User not found.");
+            res.status(404).json({msg:"User not found."});
         }
 
         const post1 = await Post.findById(req.params.PostId).populate("Comment").populate("UserId");
         if(!post1)
         {
-            res.status(404);
+            res.status(404).json({msg:"Post not found."});
             throw new Error("Post not found.");
         }
 
         // Check if the user has already liked the post
         if (post1.LikedByUsers.includes(req.params.UserId)) {
-            res.status(400);
+            res.status(400).json({msg:"User has already liked this post."});
             throw new Error("User has already liked this post.");
         }
 

@@ -11,7 +11,6 @@ const commentSchema = mongoose.Schema(
             type: ObjectId,
             ref: "User"
         },
-        
     },
     {
         timestamps: true,
