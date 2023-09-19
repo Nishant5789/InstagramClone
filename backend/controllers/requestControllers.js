@@ -7,13 +7,13 @@ const Request = require("../models/requestModel");
 //@route GET /api/request/:UserId
 //@acsess public 
 const getRequests = asyncHandler( async (req,res) => {
-    const requests = await Request.findById(RequestReciverUser = req.params.UserId).sort(timestamps);
+    const requests = await Request.find({RequestReciverUser : req.params.UserId}).populate("RequestReciverUser").populate("ReuestSenderUser");//.sort(timestamps);
     res.status(200).json(requests);
 });
 
 
 //@dec Create new Request
-//@route POST /api/request/:UserId/:ReciverId/createpost
+//@route POST /api/request/:UserId/:ReciverId/createreuest
 //@acsess public 
 const createRequest = asyncHandler(async (req,res) => {
 
@@ -21,6 +21,17 @@ const createRequest = asyncHandler(async (req,res) => {
         console.log("The request body is : ",req.body);
         const {Msg} = req.body;
         
+        const req_data = await Request.find({
+            ReuestSenderUser: req.params.UserId,
+            RequestReciverUser: req.params.ReciverId
+          });
+        console.log(req_data);
+
+        if(req_data)
+        {
+            res.status(403);
+            throw new Error("request is already there.");
+        }
         const request1 = await Request.create({
             ReuestSenderUser: req.params.UserId,
             RequestReciverUser: req.params.ReciverId,
