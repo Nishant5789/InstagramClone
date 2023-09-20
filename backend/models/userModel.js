@@ -8,26 +8,25 @@ const userSchema = mongoose.Schema({
         },
         FirstName: {
             type: String,
-            //required: [true, " Please add your Firstname. "],
+            required: [true, " Please add your Firstname. "],
         },
         LastName: {
             type: String,
-            //required: [true, " Please add your Lastname. "],
+            required: [true, " Please add your Lastname. "],
         },
         ProfilePhoto: {
             type: String,
-
         },
         Gender: {
             type: String,
-            //required: [true, " Please add mention your Gender. "]
+            required: [true, " Please add mention your Gender. "]
         },
         Bio: {
             type: String
         },
         DoB: {
             type: Date,
-            //required: [true, " Please add your birthdate. "]
+            required: [true, " Please add your birthdate. "]
         },
         Email: {
             type: String,
@@ -90,4 +89,17 @@ const userSchema = mongoose.Schema({
     }
 );
 
-module.exports = mongoose.model("User", userSchema)
+const virtualId = userSchema.virtual('id');
+virtualId.get(function () {
+    return this._id;
+})
+
+userSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) { delete ret._id }
+})
+
+
+
+exports.User = mongoose.model("User", userSchema)
