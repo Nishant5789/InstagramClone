@@ -37,4 +37,16 @@ const postSchema = mongoose.Schema(
     }  
 );
 
-module.exports = mongoose.model("Post", postSchema)
+const virtualId = postSchema.virtual('id');
+virtualId.get(function () {
+    return this._id;
+})
+
+postSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) { delete ret._id }
+})
+
+
+exports.Post = mongoose.model("Post", postSchema)

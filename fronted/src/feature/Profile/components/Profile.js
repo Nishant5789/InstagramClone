@@ -3,7 +3,6 @@ import StatusPic from '../../../assets/icons/nushrat.jpg'
 
 const Profile = () => {
   return (
-    
       <div className='grid grid-rows-6 h-screen max-w-4xl mx-auto  border-2 '>
         <div className='row-span-2  grid  grid-cols-1  border-2'>
           <div className='p-4 flex items-center'>

@@ -4,7 +4,7 @@ import Status from '../feature/Status/components/Status'
 import Posts from '../feature/Post/components/Posts'
 import Notificationpanel from '../feature/Notification/components/Notificationpanel'
 import FollowRequest from '../feature/Notification/components/FollowRequest'
-import { Route, Routes, json, useParams } from 'react-router-dom'
+import { Route, Routes, useParams } from 'react-router-dom'
 import Profile from '../feature/Profile/components/Profile'
 import Search from '../feature/Search/components/Search'
 
@@ -27,7 +27,7 @@ const Home = () => {
     <div className='grid grid-cols-1 md:grid-cols-12 relative'>
       <Navbar />
       <div className={`${isProfile ? "lg:col-span-10" : "lg:col-span-6"} col-span-11  border-2`}>
-        {/* <Status /> */}
+        <Status />
         <Routes>
           <Route>
             <Route index element={<Posts />} />

@@ -26,4 +26,16 @@ const requestSchema = mongoose.Schema(
     }  
 );
 
+const virtualId = requestSchema.virtual('id');
+virtualId.get(function () {
+    return this._id;
+})
+
+requestSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) { delete ret._id }
+})
+
+
 module.exports = mongoose.model("Request", requestSchema)

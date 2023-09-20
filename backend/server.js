@@ -50,13 +50,14 @@ app.get('/', (req, res) => {
 
 app.use(errorHandler);
 // handle routes 
+app.use('/api/auth', authRoute);
 app.use("/api/user",require("./routes/userRoutes"));
-app.use('/auth', authRoute);
 app.use('/api/post',require("./routes/postRoutes"));
 app.use('/api/chat',require("./routes/chatRoutes"));
 app.use('/api/story',require("./routes/storyRoutes"));
 app.use('/api/request',require("./routes/requestRoutes"));
 
+// handle llogin 
 passport.use(new LocalStrategy(
     { usernameField: 'email' },
     async function (email, password, done) {
@@ -81,6 +82,7 @@ passport.use(new LocalStrategy(
     }
 ));
 
+//handle all  request
 passport.use('jwt', new JwtStrategy(opts, async function (jwt_payload, done) {
     console.log(jwt_payload);
     try {
@@ -96,6 +98,7 @@ passport.use('jwt', new JwtStrategy(opts, async function (jwt_payload, done) {
         }
     }
 }));
+
 
 // this creates session variable req.user on being called from callbacks
 passport.serializeUser(function (user, cb) {
