@@ -107,4 +107,25 @@ const deleteUser = asyncHandler( async (req,res) => {
 });
 
 
-module.exports = {getUsers,createUser,getUser,updateUser,deleteUser};
+//@dec search a user
+//@route GET /api/user/search
+//@acsess public 
+const searchUser = asyncHandler(async (req,res) => {
+    const {query} = req.query;
+
+    try {
+        const user = await User.find({
+            $or: [
+                {UserName : {$regex: query,$options: 'i'}},
+                {Email : {$regex: query,$options: 'i'}},
+                {FirstName : {$regex: query,$options: 'i'}},
+                {LastName : {$regex: query,$options: 'i'}}
+            ]
+        })
+        res.status(200).json(user);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+module.exports = {getUsers,createUser,getUser,updateUser,deleteUser,searchUser};

@@ -3,7 +3,10 @@ const mongoose = require("mongoose");
 
 const storySchema = mongoose.Schema(
     {
-        
+        User:{
+            type: ObjectId,
+            ref: "User",
+        },
         CurentStory: {
             type: String
         },
