@@ -7,9 +7,9 @@ const storySchema = mongoose.Schema(
             type: ObjectId,
             ref: "User",
         },
-        CurentStory: {
-            type: String
-        },
+        // CurentStory: {
+        //     type: String
+        // },
         CurentStoryType : {
             type: String,
         },

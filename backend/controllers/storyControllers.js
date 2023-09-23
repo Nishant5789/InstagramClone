@@ -11,7 +11,6 @@ const Story = require("../models/storyModel");
 //@route POST /api/story/createstory/:UserId
 //@acsess public 
 const createStory = asyncHandler(async (req,res) => {
-    
     try {
         console.log("The request body is : ",req.body);
         const {CurentStory,CurentStoryType,StoryPath} = req.body;
@@ -31,7 +30,7 @@ const createStory = asyncHandler(async (req,res) => {
         
         const user1 = await User.findByIdAndUpdate(req.params.UserId,
             {
-                $push: { Story: story1._id }, // Add the new postid to the AllPost array
+                $push: { Story: story1._id }, 
             },
             { new: true }
         );
@@ -41,6 +40,7 @@ const createStory = asyncHandler(async (req,res) => {
 
     } catch (error) {
         console.log(error);
+        res.status(500).json(error.message);
     }
     
 });
@@ -51,7 +51,6 @@ const createStory = asyncHandler(async (req,res) => {
 //@route GET /api/story/getstorybyfollowinguser/:UserId
 //@acsess public 
 const getstorybyfollowinguser = asyncHandler(async (req,res) => {
-
     try {
         const user1 = await User.findById(req.params.UserId);
         const user1Following = user1.FollowingUser;
@@ -65,42 +64,23 @@ const getstorybyfollowinguser = asyncHandler(async (req,res) => {
         const twentyFourHoursAgo = new Date(currentTime - 24 * 60 * 60 * 1000);
         console.log(twentyFourHoursAgo);
 
-        const query = {
-            createdAt: {
-              $gte: twentyFourHoursAgo,
-              $lt: currentTime
-            }
-        }
-
-        let stories = await Story.findOne({
-            User: users._id,
-            createdAt: {
-              $gte: twentyFourHoursAgo,
-              $lt: currentTime
-            }
-          },
-            null,
-            {new : true}
-        );
-        console.log(stories);
-
-        /*
-        let stories1 = await Story.find(query).exec((err,result) =>{
-            if (err) {
-                console.error('Error:', err);
-                // Handle the error
-            } 
-            else {
-                console.log('Filtered records from the last 24 hours:', result);
-                // Handle the result
-            }
+        const allStorys = user1Following.map(async(item)=>{
+            const newStory = await Story.findOne({
+                User: item._id,
+                createdAt: {
+                  $gte: twentyFourHoursAgo,
+                  $lt: currentTime
+                }
+              },
+                null,
+                {new : true}
+            )
+            return newStory;
         })
-        console.log(stories1);
-        */
-
-        res.status(200).json(stories);
-    } catch (error) {
+        res.status(200).json(allStorys);
+    }catch (error) {
         console.log(error);
+        res.status(500).json(error);
     }
 })
 
@@ -108,7 +88,6 @@ const getstorybyfollowinguser = asyncHandler(async (req,res) => {
 //@route DELETE /api/story/:UserId/:StoryId
 //@acsess public
 const deleteStory = asyncHandler( async (req,res) => {
-
     try {
         const user = await User.findById(req.params.UserId);
         if(!user)
