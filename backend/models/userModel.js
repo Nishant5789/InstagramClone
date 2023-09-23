@@ -100,6 +100,4 @@ userSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id }
 })
 
-
-
-exports.User = mongoose.model("User", userSchema)
+module.exports = mongoose.model("User", userSchema)

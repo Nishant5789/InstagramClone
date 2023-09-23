@@ -1,13 +1,13 @@
 const asyncHandler = require("express-async-handler");
-const User = require("../models/userModel");
 const Request = require("../models/requestModel");
 const mongoose = require('mongoose');
+const User = require("../models/userModel");
 
 //@dec Get all requests
 //@route GET /api/request/:UserId
 //@acsess public 
 const getRequests = asyncHandler( async (req,res) => {
-    const requests = await Request.find({RequestReceiverUser : req.params.UserId}).sort({StatusRequest :"Accepted" /* StatusRequest:"Pending"*/ }).populate("RequestReceiverUser").populate("RequestSenderUser");//.sort(timestamps);
+    const requests = await Request.find({RequestReceiverUser : req.params.UserId}).populate("RequestReceiverUser").populate("RequestSenderUser");//.sort(timestamps);
     res.status(200).json(requests);
 });
 
