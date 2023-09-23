@@ -15,7 +15,7 @@ const jwt = require('jsonwebtoken');
 
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 //connecting to database
 connectDb();
@@ -52,6 +52,7 @@ app.use(errorHandler);
 // handle routes 
 app.use('/api/auth', authRoute);
 app.use("/api/user",require("./routes/userRoutes"));
+app.use('/api/auth', authRoute);
 app.use('/api/post',require("./routes/postRoutes"));
 app.use('/api/chat',require("./routes/chatRoutes"));
 app.use('/api/story',require("./routes/storyRoutes"));

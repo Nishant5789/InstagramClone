@@ -1,9 +1,9 @@
 const asyncHandler = require("express-async-handler");
-const { Post } = require("../models/postModel");
 const { post } = require("../routes/postRoutes");
 const { User } = require("../models/userModel");
 const { Comment } = require("../models/commentModel");
 const e = require("express");
+const Post = require("../models/postModel");
 
 
 //@dec Get all posts
@@ -28,12 +28,13 @@ const getPosts = asyncHandler(async (req, res) => {
 //@acsess public 
 const createPost = asyncHandler(async (req, res) => {
 
-    try {
-        console.log("The request body is : ", req.body);
-        const { PostType, PostPath } = req.body;
+    try{
+        console.log("The request body is : ",req.body);
+        const {PostType,PostPath,Taggeduser} = req.body;
 
-        if (!PostType || !PostPath) {
-            res.status(400).json({ msg: "All fields are required." });
+        if(!PostType || !PostPath )
+        {
+            res.status(400).json({msg:"All fields are required."});
             throw new Error("All fields are required.");
         }
 

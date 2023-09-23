@@ -16,19 +16,14 @@ const createUser = asyncHandler(async (req,res) => {
 
     try {
         console.log("The request body is : ",req.body);
-        const {Username,Email,Password} = req.body;
+        const {UserName,Email,Password} = req.body;
 
-        if(!Username || !Email || !Password)
+        if(!UserName || !Email || !Password)
         {
-            res.status(400);
-            throw new Error("All fields are required.");
+            res.status(400).json({messag:"All fields are required"});
         }
 
-        const user = await User.create({
-            UserName: Username,
-            Email: Email,
-            Password: Password,
-        });
+        const user = await User.create(req.body);
 
         res.status(201).json(user);
 
@@ -64,7 +59,6 @@ const getUser = asyncHandler( async (req,res) => {
 //@route PUT /api/user/:id
 //@acsess public
 const updateUser = asyncHandler(async (req,res) => {
-
     try {
         const user = await User.findById(req.params.id);
         if(!user)
