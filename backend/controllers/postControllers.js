@@ -179,44 +179,4 @@ const likePost = asyncHandler(async (req, res) => {
 });
 
 
-/*
-//@dec get a user
-//@route GET /api/post/:id
-//@acsess public
-const getPost = asyncHandler( async (req,res) => {
-    const post1 = await Post.findById(req.params.id);
-
-    if(!post1)
-    {
-        res.status(404);
-        throw new Error("User not found.");
-    }
-
-    res.status(200).json(user);
-});
-*/
-
-/*
-//@dec update a user
-//@route PUT /api/post/:id
-//@acsess public
-const updateUser = asyncHandler(async (req,res) => {
-    const user = await User.findById(req.params.id);
-    if(!user)
-    {
-        res.status(404);
-        throw new Error("User not found.");
-    }
-
-    const updateUser = await User.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {new : true},
-    )
-    console.log(updateUser),
-    res.status(200).json(updateUser);
-});
-*/
-
-
 module.exports = { getPosts, createPost, deletePost, commentPost, likePost };
