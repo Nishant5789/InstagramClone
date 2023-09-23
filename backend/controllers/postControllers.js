@@ -1,9 +1,9 @@
 const asyncHandler = require("express-async-handler");
-const { Post } = require("../models/postModel");
 const { post } = require("../routes/postRoutes");
 const { User } = require("../models/userModel");
 const { Comment } = require("../models/commentModel");
 const e = require("express");
+const Post = require("../models/postModel");
 
 
 //@dec Get all posts
@@ -28,12 +28,13 @@ const getPosts = asyncHandler(async (req, res) => {
 //@acsess public 
 const createPost = asyncHandler(async (req, res) => {
 
-    try {
-        console.log("The request body is : ", req.body);
-        const { PostType, PostPath } = req.body;
+    try{
+        console.log("The request body is : ",req.body);
+        const {PostType,PostPath,Taggeduser} = req.body;
 
-        if (!PostType || !PostPath) {
-            res.status(400).json({ msg: "All fields are required." });
+        if(!PostType || !PostPath )
+        {
+            res.status(400).json({msg:"All fields are required."});
             throw new Error("All fields are required.");
         }
 
@@ -177,46 +178,6 @@ const likePost = asyncHandler(async (req, res) => {
         console.log(error);
     }
 });
-
-
-/*
-//@dec get a user
-//@route GET /api/post/:id
-//@acsess public
-const getPost = asyncHandler( async (req,res) => {
-    const post1 = await Post.findById(req.params.id);
-
-    if(!post1)
-    {
-        res.status(404);
-        throw new Error("User not found.");
-    }
-
-    res.status(200).json(user);
-});
-*/
-
-/*
-//@dec update a user
-//@route PUT /api/post/:id
-//@acsess public
-const updateUser = asyncHandler(async (req,res) => {
-    const user = await User.findById(req.params.id);
-    if(!user)
-    {
-        res.status(404);
-        throw new Error("User not found.");
-    }
-
-    const updateUser = await User.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {new : true},
-    )
-    console.log(updateUser),
-    res.status(200).json(updateUser);
-});
-*/
 
 
 module.exports = { getPosts, createPost, deletePost, commentPost, likePost };

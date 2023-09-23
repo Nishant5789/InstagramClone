@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 
 const requestSchema = mongoose.Schema(
     {
-        ReuestSenderUser: {
+        RequestSenderUser: {
             type: ObjectId,
             ref: "User"
         },
-        RequestReciverUser: {
+        RequestReceiverUser: {
             type: ObjectId,
             ref: "User"
         },

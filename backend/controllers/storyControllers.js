@@ -8,37 +8,36 @@ const Story = require("../models/storyModel");
 
 
 //@dec Create new story
-//@route POST /api/story/:UserId/createstory
+//@route POST /api/story/createstory/:UserId
 //@acsess public 
 const createStory = asyncHandler(async (req,res) => {
     
     try {
         console.log("The request body is : ",req.body);
-        const {PostType,Postpath,Taggeduser} = req.body;
+        const {CurentStory,CurentStoryType,StoryPath} = req.body;
 
-        if(!PostType || !Postpath )
+        if(!CurentStory || !CurentStoryType || !CurentStoryType || !req.params.UserId)
         {
             res.status(400);
             throw new Error("All fields are required.");
         }
 
-        const post1 = await Post.create({
-            PostType: PostType,
-            UserId: req.params.UserId,
-            PostPath: Postpath,
-            TaggedUser: Taggeduser,
-            TotalLikes: 0,
+        const story1 = await Story.create({
+            User: req.params.UserId,
+            CurentStory: CurentStory,
+            CurentStoryType: CurentStoryType,
+            StoryPath: StoryPath,
         });
         
         const user1 = await User.findByIdAndUpdate(req.params.UserId,
             {
-                $push: { AllPost: post1._id }, // Add the new postid to the AllPost array
+                $push: { Story: story1._id }, // Add the new postid to the AllPost array
             },
             { new: true }
         );
         console.log(user1);
 
-        res.status(201).json(post1);
+        res.status(201).json(story1);
 
     } catch (error) {
         console.log(error);
@@ -46,6 +45,64 @@ const createStory = asyncHandler(async (req,res) => {
     
 });
 
+
+// get story of following by timestamp
+//@dec Get a story of following
+//@route GET /api/story/getstorybyfollowinguser/:UserId
+//@acsess public 
+const getstorybyfollowinguser = asyncHandler(async (req,res) => {
+
+    try {
+        const user1 = await User.findById(req.params.UserId);
+        const user1Following = user1.FollowingUser;
+        console.log(user1Following);
+
+        const users = await User.findById(user1Following); // user1Following.Story;
+        console.log(users);
+
+        const currentTime = new Date();  // Current date and time
+        console.log(currentTime);
+        const twentyFourHoursAgo = new Date(currentTime - 24 * 60 * 60 * 1000);
+        console.log(twentyFourHoursAgo);
+
+        const query = {
+            createdAt: {
+              $gte: twentyFourHoursAgo,
+              $lt: currentTime
+            }
+        }
+
+        let stories = await Story.findOne({
+            User: users._id,
+            createdAt: {
+              $gte: twentyFourHoursAgo,
+              $lt: currentTime
+            }
+          },
+            null,
+            {new : true}
+        );
+        console.log(stories);
+
+        /*
+        let stories1 = await Story.find(query).exec((err,result) =>{
+            if (err) {
+                console.error('Error:', err);
+                // Handle the error
+            } 
+            else {
+                console.log('Filtered records from the last 24 hours:', result);
+                // Handle the result
+            }
+        })
+        console.log(stories1);
+        */
+
+        res.status(200).json(stories);
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 //@dec delete a story
 //@route DELETE /api/story/:UserId/:StoryId
@@ -85,4 +142,4 @@ const deleteStory = asyncHandler( async (req,res) => {
     
 });
 
-module.exports = {createStory,deleteStory};
+module.exports = {createStory,deleteStory,getstorybyfollowinguser};

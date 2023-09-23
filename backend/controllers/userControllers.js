@@ -16,19 +16,14 @@ const createUser = asyncHandler(async (req,res) => {
 
     try {
         console.log("The request body is : ",req.body);
-        const {Username,Email,Password} = req.body;
+        const {UserName,Email,Password} = req.body;
 
-        if(!Username || !Email || !Password)
+        if(!UserName || !Email || !Password)
         {
-            res.status(400);
-            throw new Error("All fields are required.");
+            res.status(400).json({messag:"All fields are required"});
         }
 
-        const user = await User.create({
-            UserName: Username,
-            Email: Email,
-            Password: Password,
-        });
+        const user = await User.create(req.body);
 
         res.status(201).json(user);
 
@@ -64,7 +59,6 @@ const getUser = asyncHandler( async (req,res) => {
 //@route PUT /api/user/:id
 //@acsess public
 const updateUser = asyncHandler(async (req,res) => {
-
     try {
         const user = await User.findById(req.params.id);
         if(!user)
@@ -107,4 +101,25 @@ const deleteUser = asyncHandler( async (req,res) => {
 });
 
 
-module.exports = {getUsers,createUser,getUser,updateUser,deleteUser};
+//@dec search a user
+//@route GET /api/user/search
+//@acsess public 
+const searchUser = asyncHandler(async (req,res) => {
+    const {query} = req.query;
+
+    try {
+        const user = await User.find({
+            $or: [
+                {UserName : {$regex: query,$options: 'i'}},
+                {Email : {$regex: query,$options: 'i'}},
+                {FirstName : {$regex: query,$options: 'i'}},
+                {LastName : {$regex: query,$options: 'i'}}
+            ]
+        })
+        res.status(200).json(user);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+module.exports = {getUsers,createUser,getUser,updateUser,deleteUser,searchUser};
