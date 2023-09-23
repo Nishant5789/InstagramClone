@@ -4,6 +4,7 @@ import SinglePost from './SinglePost'
 import { fetchAllPostsByUserAsync, selectuserAllPosts } from '../Postslice';
 import { useEffect } from 'react';
 import { getLoggeduserId } from '../../../app/constant';
+import Postmodal from './Postmodal';
 
 
 const Posts = () => {
@@ -13,7 +14,7 @@ const Posts = () => {
   // console.log(posts);
 
   useEffect(()=>{
-      dispatch(fetchAllPostsByUserAsync());
+      // dispatch(fetchAllPostsByUserAsync());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
@@ -21,12 +22,12 @@ const Posts = () => {
     <>
     <div className='space-y-6'>
       {
-        posts.map((post) => {
-          return <SinglePost post={post} key={post.id}/>
-        })
+        // posts.map((post) => {
+        //   return <SinglePost post={post} key={post.id}/>
+        // })
       }
     </div>
-    {/* <Postmodal/> */}
+    <Postmodal/>
     </>
   )
 }
