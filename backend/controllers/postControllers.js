@@ -1,9 +1,8 @@
 const asyncHandler = require("express-async-handler");
-const { post } = require("../routes/postRoutes");
-const { User } = require("../models/userModel");
-const { Comment } = require("../models/commentModel");
 const e = require("express");
 const Post = require("../models/postModel");
+const User = require("../models/userModel");
+const Comment = require("../models/commentModel");
 
 
 //@dec Get all posts
@@ -17,7 +16,7 @@ const getPosts = asyncHandler(async (req, res) => {
                 path: 'CommentedBy'
             }
         }
-    ).populate("UserId");
+    ).populate("UserId").sort({createdAt:-1});
 
     res.status(200).json(posts);
 });

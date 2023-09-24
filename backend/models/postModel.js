@@ -11,6 +11,9 @@ const postSchema = mongoose.Schema(
             type: [ObjectId],
             ref: "Comment"
         },
+        Caption: {
+            type: String,
+        },
         PostPath: {
             type: String,
             required: [true, "Post path must be mentioned."]

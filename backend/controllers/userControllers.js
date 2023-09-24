@@ -39,8 +39,17 @@ const createUser = asyncHandler(async (req,res) => {
 const getUser = asyncHandler( async (req,res) => {
 
     try {
-        const user = await User.findById(req.params.id);
-
+        const user = await User.findById(req.params.id).populate(
+            {
+                path: 'AllPost',
+                populate: {
+                    path: 'Comment',
+                    populate: {
+                        path: 'CommentedBy'
+                    }
+                }  
+            }
+        );
         if(!user)
         {
             res.status(404);
