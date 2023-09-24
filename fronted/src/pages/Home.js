@@ -7,6 +7,7 @@ import FollowRequest from '../feature/Notification/components/FollowRequest'
 import { Route, Routes, useParams } from 'react-router-dom'
 import Profile from '../feature/Profile/components/Profile'
 import Search from '../feature/Search/components/Search'
+import { ToastContainer } from 'react-toastify'
 
 
 
@@ -15,32 +16,34 @@ const Home = () => {
   // const [isStatus, setIsStatus] = useState(false);
   const RenderPath = useParams()["*"];
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("effect");
-    if(RenderPath === 'Profile')
+    if (RenderPath === 'Profile')
       setIsProfile(true);
     else
       setIsProfile(false);
-  },[RenderPath])
+  }, [RenderPath])
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-12 relative'>
-      <Navbar />
-      <div className={`${isProfile ? "lg:col-span-10" : "lg:col-span-6"} col-span-11  border-2`}>
-        <Status />
-        <Routes>
-          <Route>
-            <Route index element={<Posts />} />
-            <Route path="/Notification" element={<Notificationpanel />} />
-            <Route path="/Followrequest" element={<FollowRequest />} />
-            <Route path="/Profile" element={<Profile />} />
-            <Route path="/Search" element={<Search />} />
-          </Route>
-        </Routes>
+    <>
+      <div className='grid grid-cols-1 md:grid-cols-12 relative'>
+        <Navbar />
+        <div className={`${isProfile ? "lg:col-span-10" : "lg:col-span-6"} col-span-11  border-2`}>
+          <Status />
+          <Routes>
+            <Route>
+              <Route index element={<Posts />} />
+              <Route path="/Notification" element={<Notificationpanel />} />
+              <Route path="/Followrequest" element={<FollowRequest />} />
+              <Route path="/Profile" element={<Profile />} />
+              <Route path="/Search" element={<Search />} />
+            </Route>
+          </Routes>
+        </div>
+        <div className='lg:col-span-4 hidden lg:block border-purple-600 border-2'>nishant</div>
       </div>
-      <div className='lg:col-span-4 hidden lg:block border-purple-600 border-2'>nishant</div>
-    </div>
-
+      <ToastContainer />
+    </>
   )
 }
 

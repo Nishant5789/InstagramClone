@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { commentPost, createPost, fetchAllPostsByUser, fetchAllPostsOnHomePage, likePost } from './postApi';
 
 const initialState = {
-    status: 'idle',
     userAllPosts: [],
-    HomePagePosts: [],
+    status: 'idle',
+    HomePagePosts: []
 };
 
 export const fetchAllPostsByUserAsync = createAsyncThunk('post/fetchAllPostsByUser', async () => {
@@ -27,34 +27,30 @@ export const fetchAllPostsOnHomePageAsync = createAsyncThunk('post/fetchAllPosts
     }
 })
 
-export const createPostAsync = createAsyncThunk('post/createPostAsync', async()=>{
+export const createPostAsync = createAsyncThunk('post/createPostAsync', async(postObject)=>{
     try {
-        const { data } = await createPost();
+        const { data } = await createPost(postObject);
         return data;
     } catch (error) {
         console.log(error);
     }
 })
 
-export const handleLikePostAsync = createAsyncThunk('post/handleLikePostAsync', async()=>{
+export const handleLikePostAsync = createAsyncThunk('post/handleLikePostAsync', async(PostID)=>{
+    const { data } = await likePost(PostID);
+    return data;
+})
+
+export const handleCommentPostAsync = createAsyncThunk('post/handleCommentPostAsync', async({postID:PostID,Commentcontent})=>{
     try {
-        const { data } = await likePost();
-        return data;
+        // console.log({PostID,Commentcontent});
+        const { data } = await commentPost({PostID,Commentcontent});
+        return {data, PostID};
+
     } catch (error) {
         console.log(error);
     }
 })
-
-export const handleCommentPostAsync = createAsyncThunk('post/handleCommentPostAsync', async()=>{
-    try {
-        const { data } = await commentPost();
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
-})
-
-
 
 export const postSlice = createSlice({
     name: 'post',
@@ -76,12 +72,35 @@ export const postSlice = createSlice({
             .addCase(fetchAllPostsOnHomePageAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
                 state.HomePagePosts = action.payload;
+            })
+            .addCase(createPostAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(createPostAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+            })
+            .addCase(handleLikePostAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(handleLikePostAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                const PostIndex = state.userAllPosts.findIndex((item)=>item.id===action.payload.id);
+                state.userAllPosts.splice(PostIndex, 1, action.payload);
+            })
+            .addCase(handleCommentPostAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(handleCommentPostAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                const PostIndex = state.userAllPosts.findIndex((item)=>item.id===action.payload.PostID);
+                state.userAllPosts[PostIndex].Comment.push(action.payload.data);
             });
     },
 });
 
 export const selectuserAllPosts = (state) => state.post.userAllPosts;
 export const selectHomePagePosts = (state) => state.post.HomePagePosts;
+export const selectPostUploadStatus = (state) => state.post.status;
 
 
 export default postSlice.reducer;

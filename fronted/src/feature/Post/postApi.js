@@ -9,16 +9,17 @@ export function fetchAllPostsOnHomePage() {
      return axios.get(`http://dummy/api/post/${getLoggeduserId()}`);
 }
 
-export function createPost() {
-     return axios.post(`http://localhost:8080/api/post/createpost/${getLoggeduserId()}`);
+export function createPost(postObject) {
+     return axios.post(`http://localhost:8080/api/post/createpost/${getLoggeduserId()}`,postObject);
 }
 
 export function likePost(postId) {
      return axios.put(`http://localhost:8080/api/post/like/${getLoggeduserId()}/${postId}`);
 }
 
-export function commentPost(postId) {
-     return axios.post(`http://localhost:8080/api/post/comment/${getLoggeduserId()}/${postId}`);
+export function commentPost({PostID,Commentcontent}) {
+     // console.log(Commentcontent);
+     return axios.post(`http://localhost:8080/api/post/comment/${getLoggeduserId()}/${PostID}`,{Commentcontent});
 }
 
 export function deletePost(postId) {

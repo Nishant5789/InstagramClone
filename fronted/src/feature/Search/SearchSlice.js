@@ -6,9 +6,9 @@ const initialState = {
     searchData: []
 };
 
-export const handleSearchResponceAsync = createAsyncThunk('search/handleSearchResponceAsync', async () => {
+export const handleSearchResponceAsync = createAsyncThunk('search/handleSearchResponceAsync', async (Searchdata) => {
     try {
-        const { data } = handleSearchResponce();
+        const { data } = await handleSearchResponce(Searchdata);
         return data;
     }
     catch (err) {
@@ -29,7 +29,7 @@ export const searchSlice = createSlice({
             })
             .addCase(handleSearchResponceAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
-                state.allRequestForUser = action.payload;
+                state.searchData = action.payload;
             })
     },
 });

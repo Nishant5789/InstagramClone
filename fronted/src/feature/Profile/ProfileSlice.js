@@ -3,12 +3,12 @@ import { fetchUserDetail, handleChangeProfilePic, handleModifyProfile } from './
 
 const initialState = {
     status: 'idle',
-    userDetail: [],
+    CurrUserProfileDetail: [],
 };
 
-export const fetchUserDetailAsync = createAsyncThunk('profile/fetchUserDetailAsync', async () => {
+export const fetchUserDetailAsync = createAsyncThunk('profile/fetchUserDetailAsync', async (UserId) => {
     try {
-        const { data } = fetchUserDetail();
+        const { data } = await fetchUserDetail(UserId);
         return data;
     }
     catch (err) {
@@ -51,12 +51,12 @@ export const profileSlice = createSlice({
             })
             .addCase(fetchUserDetailAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
-                state.userDetail = action.payload;
+                state.CurrUserProfileDetail = action.payload;
             })
     },
 });
 
-export const selectUserDetail = (state) => state.profile.userDetail;
+export const selectCurrUserProfileDetail = (state) => state.profile.CurrUserProfileDetail;
 
 
 export default profileSlice.reducer;
