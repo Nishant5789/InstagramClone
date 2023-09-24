@@ -54,30 +54,40 @@ const getstorybyfollowinguser = asyncHandler(async (req,res) => {
     try {
         const user1 = await User.findById(req.params.UserId);
         const user1Following = user1.FollowingUser;
-        console.log(user1Following);
+        console.log({user1Following});
 
-        const users = await User.findById(user1Following); // user1Following.Story;
-        console.log(users);
+        // const users = await User.findById(user1Following); // user1Following.Story;
+        // console.log(users);
 
         const currentTime = new Date();  // Current date and time
         console.log(currentTime);
         const twentyFourHoursAgo = new Date(currentTime - 24 * 60 * 60 * 1000);
         console.log(twentyFourHoursAgo);
 
-        const allStorys = user1Following.map(async(item)=>{
-            const newStory = await Story.findOne({
-                User: item._id,
+        let allStorys = [];
+
+        const getstory = async(Id)=>{
+            // console.log(Id);
+            const newStory = await Story.find({
+                User: Id,
                 createdAt: {
                   $gte: twentyFourHoursAgo,
                   $lt: currentTime
                 }
-              },
-                null,
-                {new : true}
-            )
+              }
+            ).populate("User");
             return newStory;
-        })
-        res.status(200).json(allStorys);
+        }
+        
+        // const docs = await  user1Following.forEach(async(item) => {
+        //     const abc = await getstory(item.toString());
+        //     console.log(abc);
+        // })
+
+        // console.log("send");
+
+        // only get the status of firest folowing user
+        res.status(200).json(await getstory(user1Following[0].toString()));
     }catch (error) {
         console.log(error);
         res.status(500).json(error);

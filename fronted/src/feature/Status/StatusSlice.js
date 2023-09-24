@@ -3,12 +3,13 @@ import { createStatus, fetchAllStatusOnHomePage } from './StatusApi';
 
 const initialState = {
     status: 'idle',
-    statusData: []
+    statusData: [],
+    currStatusUpload:null
 };
 
 export const fetchAllStoryOnHomePageAsync = createAsyncThunk('status/fetchAllStatusOnHomePage', async () => {
     try {
-        const { data } = fetchAllStatusOnHomePage();
+        const { data } = await fetchAllStatusOnHomePage();
         return data;
     }
     catch (err) {
@@ -16,9 +17,9 @@ export const fetchAllStoryOnHomePageAsync = createAsyncThunk('status/fetchAllSta
     };
 }
 );
-export const createStatusAsync = createAsyncThunk('status/createStatusAsync', async () => {
+export const createStatusAsync = createAsyncThunk('status/createStatusAsync', async (StatusData) => {
     try {
-        const { data } = createStatus();
+        const { data } = await createStatus(StatusData);
         return data;
     }
     catch (err) {
@@ -34,16 +35,27 @@ export const statusSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(createStatusAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(createStatusAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                state.currStatusUpload=action.payload;
+            })
             .addCase(fetchAllStoryOnHomePageAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(fetchAllStoryOnHomePageAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
+                state.statusData=action.payload;
             })
+            
     },
 });
 
 export const selectStoryData = (state) => state.status.statusData;
+export const selectStoryUploadstatus = (state) => state.status.status;
+export const selectCurrStatus = (state) => state.status.currStatusUpload;
 
 
 export default statusSlice.reducer;

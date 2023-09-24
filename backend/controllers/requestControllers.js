@@ -16,12 +16,12 @@ const getRequests = asyncHandler(async (req, res) => {
 //@route POST /api/request/createrequest/:UserId/:ReceiverId
 //@acsess public 
 const createRequest = asyncHandler(async (req, res) => {
-
     try {
         console.log("The request body is : ", req.body);
         const { Msg } = req.body;
         console.log(req.params.UserId);
         console.log(req.params.ReceiverId);
+
         const existingRequest = await Request.findOne({
             RequestSenderUser: req.params.UserId,
             RequestReceiverUser: req.params.ReceiverId,
@@ -38,14 +38,18 @@ const createRequest = asyncHandler(async (req, res) => {
             StatusRequest: "Pending",
             Msg: Msg,
         });
-
+        
+        const user1 = await User.findByIdAndUpdate(req.params.ReceiverId,
+            {
+                $push: { Request: request1._id }, // Add the new postid to the AllPost array
+            },
+            { new: true }
+        );
         res.status(201).json(request1);
-
     } catch (error) {
         console.log(error);
         return res.status(500).json({msg: error});
     }
-
 });
 
 //@dec update a request
@@ -104,6 +108,7 @@ const updateRequest = asyncHandler(async (req, res) => {
                 },
                 { new: true }
             );
+
             res.status(200).json(updateCurrentRequest);
         }
         else {

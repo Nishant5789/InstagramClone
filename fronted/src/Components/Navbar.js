@@ -26,11 +26,13 @@ const Navbar = () => {
           <div className="flex flex-row">
             <div className='relative'>
             <img src={SearchIcon} className='w-5 h-5 absolute inset-y-0 left-2 top-4'  alt="" />
+            <Link to="/Search">
             <input
               type="search"
               className="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border outline-none border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
               placeholder="Search"
-            />
+              />
+              </Link>
             <button
               type="submit"
               className="text-white absolute right-2.5 bottom-2.5  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
@@ -59,10 +61,12 @@ const Navbar = () => {
           <h1 className='font-bold hidden lg:block'>Home</h1>
         </li>
       </Link>
+      <Link to="/Search">
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={searchNavbar} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Search</h1>
         </li>
+      </Link>
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={Reellogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Reels</h1>
@@ -79,10 +83,12 @@ const Navbar = () => {
           <h1 className='font-bold hidden lg:block'>Notifications</h1>
         </li>
         </Link>
+        <Link to="/">
         <li onClick={()=>setOpenCretePostmodal(!openCretePostmodal)} className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={AddLogo} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Create</h1>
         </li>
+        </Link>
         <Link to="/Profile">
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={Sampleavatar} className='w-10 h-10 ' alt="" />
