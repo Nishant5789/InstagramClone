@@ -5,8 +5,6 @@ const User = require("../models/userModel");
 const Comment = require("../models/commentModel");
 const Chat = require("../models/chatModel");
 
-
-
 //@dec add a chat
 //@route POST /api/chat/:Chatid/
 //@acsess public
@@ -30,6 +28,43 @@ const addChatMessage = asyncHandler( async (req,res) => {
     }
     
 });
+const getAllUserChats = asyncHandler( async (req,res) => {
+    try {
+        const CurrUser = await User.findById(req.params.UserID).populate("FollowingUser").populate("FollowersUser");
+    
+        const FollowingUser = CurrUser.FollowingUser;
+        const FollowersUser = CurrUser.FollowersUser;
+        let UserChatsData = [];
+
+        FollowingUser.forEach(currUser => {
+            const {UserName, ProfilePhoto, id} = currUser;
+            UserChatsData.push({UserName, ProfilePhoto, UserID:id})
+        });
+
+        FollowersUser.forEach(currUser => {
+            const {UserName, ProfilePhoto, id} = currUser;
+            UserChatsData.push({UserName, ProfilePhoto, UserID:id})
+        });
+
+        let FilterUserChatsData = [];
+        const uniqueKeys = new Set();
+
+        for (const obj of UserChatsData) {
+            const key = obj.UserID; 
+            if (!uniqueKeys.has(key)) {
+              uniqueKeys.add(key);
+              FilterUserChatsData.push(obj);
+            }
+          }
+          
+
+        res.status(200).json(FilterUserChatsData);
+    } catch (error) {
+        console.log(error);
+        res.status(404).json(error);
+    }
+    
+});
 
 //@dec get a chat
 //@route GET /api/chat/:Chatid
@@ -40,16 +75,11 @@ const getchat = asyncHandler( async (req,res) => {
         console.log(req.params.chatId);
         const chat = await Chat.find({ChatId:req.params.chatId});
 
-        if(chat){
-            res.status(200).json(chat);
-        }
-        else{
-            res.status(400).json({"msg": "chat not found"});
-        }   
+        res.status(200).json(chat);
     }
     catch(error){
         console.log(error);
     }
 });
 
-module.exports = {addChatMessage,getchat};
+module.exports = {addChatMessage,getchat, getAllUserChats};

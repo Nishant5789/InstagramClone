@@ -8,7 +8,7 @@ const initialState = {
 
 export const fetchAllRequestByUserAsync = createAsyncThunk('notifications/fetchAllRequestByUserAsync', async () => {
     try {
-        const { data } = fetchAllRequestByUser();
+        const { data } = await fetchAllRequestByUser();
         return data;
     }
     catch (err) {
@@ -17,9 +17,9 @@ export const fetchAllRequestByUserAsync = createAsyncThunk('notifications/fetchA
 }
 );
 export const HandleSendRequestAsync = createAsyncThunk(
-    'notifications/HandleSendRequestAsync', async () => {
+    'notifications/HandleSendRequestAsync', async ({ReceiverId, Msg}) => {
     try {
-        const { data } = HandleSendRequest();
+        const { data } = await HandleSendRequest(ReceiverId, Msg);
         return data;
     }
     catch (err) {
@@ -28,9 +28,9 @@ export const HandleSendRequestAsync = createAsyncThunk(
 }
 );
 export const HandleModifyRequestAsync = createAsyncThunk(
-    'notifications/HandleModifyRequestAsync', async () => {
+    'notifications/HandleModifyRequestAsync', async (RequestData) => {
     try {
-        const { data } = HandleModifyRequest();
+        const { data } = await HandleModifyRequest(RequestData);
         return data;
     }
     catch (err) {

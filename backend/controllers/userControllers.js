@@ -49,7 +49,7 @@ const getUser = asyncHandler( async (req,res) => {
                     }
                 }  
             }
-        );
+        ).populate('Request');
         if(!user)
         {
             res.status(404);

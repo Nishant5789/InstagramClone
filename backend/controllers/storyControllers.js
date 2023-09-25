@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 const Post = require("../models/postModel");
-const { post } = require("../routes/postRoutes");
 const User = require("../models/userModel");
 const Comment = require("../models/commentModel");
 const Chat = require("../models/chatModel");
@@ -59,25 +58,25 @@ const getstorybyfollowinguser = asyncHandler(async (req,res) => {
         // const users = await User.findById(user1Following); // user1Following.Story;
         // console.log(users);
 
-        const currentTime = new Date();  // Current date and time
-        console.log(currentTime);
-        const twentyFourHoursAgo = new Date(currentTime - 24 * 60 * 60 * 1000);
-        console.log(twentyFourHoursAgo);
+        // const currentTime = new Date();  // Current date and time
+        // console.log(currentTime);
+        // const twentyFourHoursAgo = new Date(currentTime - 24 * 60 * 60 * 1000);
+        // console.log(twentyFourHoursAgo);
 
-        let allStorys = [];
+        // let allStorys = [];
 
-        const getstory = async(Id)=>{
-            // console.log(Id);
-            const newStory = await Story.find({
-                User: Id,
-                createdAt: {
-                  $gte: twentyFourHoursAgo,
-                  $lt: currentTime
-                }
-              }
-            ).populate("User");
-            return newStory;
-        }
+        // const getstory = async(Id)=>{
+        //     // console.log(Id);
+        //     const newStory = await Story.find({
+        //         User: Id,
+        //         // createdAt: {
+        //         //   $gte: twentyFourHoursAgo,
+        //         //   $lt: currentTime
+        //         // }
+        //       }
+        //     ).populate("User");
+        //     return newStory;
+        // }
         
         // const docs = await  user1Following.forEach(async(item) => {
         //     const abc = await getstory(item.toString());
@@ -87,7 +86,9 @@ const getstorybyfollowinguser = asyncHandler(async (req,res) => {
         // console.log("send");
 
         // only get the status of firest folowing user
-        res.status(200).json(await getstory(user1Following[0].toString()));
+        const newStory = await Story.find({ User: user1Following[0].toString()  }).populate("User");
+
+        res.status(200).json(newStory);
     }catch (error) {
         console.log(error);
         res.status(500).json(error);

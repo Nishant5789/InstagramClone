@@ -1,27 +1,52 @@
 import React, { useEffect, useState } from 'react'
 import StatusPic from '../../../assets/icons/nushrat.jpg'
-import { useSelector } from 'react-redux'
-import { selectCurrUserProfileDetail } from '../ProfileSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUserDetailAsync, selectCurrUserProfileDetail } from '../ProfileSlice'
 import { getLoggeduserId } from '../../../app/constant'
+import { HandleSendRequestAsync } from '../../Notification/notificationSlice'
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const CurrUserProfile = useSelector(selectCurrUserProfileDetail);
   const [ChooseButton, setButton] = useState("Send Request");
 
-  const {UserName, FirstName, LastName, ProfilePhoto, AllPost ,Gender, Bio, DoB, Email, AccType, FollowingUser, BlockedUser, FollowersUser } = CurrUserProfile;
+  const {UserName, FirstName, LastName, ProfilePhoto, AllPost ,Gender, Bio, DoB, Email, AccType, FollowingUser, BlockedUser, Request ,FollowersUser, id:UserID } = CurrUserProfile;
+
+  const handleButton = ()=>{
+    if(ChooseButton==="Send Request"){
+      dispatch(HandleSendRequestAsync( {
+        ReceiverId:UserID,
+        Msg:`${getLoggeduserId()} requested to follow you`
+      }));
+      setTimeout(()=>dispatch(fetchUserDetailAsync(UserID)),1000);
+    }
+  }
   
   useEffect(()=>{
+    let RequestedUser = [];
+    // console.log(Request);
+    if(Request!==undefined){
+      RequestedUser =  Request.map((Req)=>{
+        return Req.RequestSenderUser;
+      })
+    }
+
     const IsFollowing = FollowingUser && FollowingUser.includes(getLoggeduserId());
     const IsFollower = FollowersUser && FollowersUser.includes(getLoggeduserId());
+    const IsRequestedUser = RequestedUser && RequestedUser.includes(getLoggeduserId());
+
     
-    console.log({IsFollower,IsFollowing });
+    // console.log({IsFollower,IsFollowing,  IsRequestedUser});
+    if(IsRequestedUser){
+      setButton("Pending");
+    }
     if(IsFollower && IsFollowing){
-      setButton("Following")
+      setButton("Following");
     }
     else if (IsFollowing && !IsFollower){
-      setButton("Follow Back")
+      setButton("Follow Back");
     }
-  },[FollowingUser, FollowersUser])
+  },[FollowingUser, FollowersUser, Request])
 
   return (
       <div className='grid grid-rows-6 min-h-screen max-w-4xl mx-auto  border-2 '>
@@ -31,7 +56,8 @@ const Profile = () => {
             <div className='p-2'>
               <h1 className='text-xl font-bold'>{UserName}</h1>
               <ul className='flex gap-x-2'>
-                <li className='px-2 py-2 bg-slate-300 rounded-md'>{ChooseButton}</li>
+                <li onClick={handleButton} className='px-2 py-2 bg-purple-600 active:bg-purple-400 text-white rounded-md'>{ChooseButton}</li>
+                {ChooseButton==="Following" && <li className='px-2 py-2 bg-red-600 active:bg-red-500 text-white rounded-md'>UnFollow</li>}
               </ul>
             </div>
           </div>
