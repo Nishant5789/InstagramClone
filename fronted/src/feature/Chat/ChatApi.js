@@ -5,7 +5,7 @@ export function fetchAllUserChats() {
     return axios.get(`http://localhost:8080/api/chat/${getLoggeduserId()}`);
 }
 
-export function SendMessage(chatData) {
+export function SendMessage(chatData, ChatId) {
     return axios.post(`http://localhost:8080/api/chat/${ChatId}`, chatData);
 }
 

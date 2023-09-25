@@ -4,7 +4,7 @@ export function getTotalProductsPerPage() {
 }
 
 export function getLoggeduserId(){
-    return "650b259fd6f58d3d39876f47";
+    return "6511bc7730d438cf7f2f9f88";
 }
 
 

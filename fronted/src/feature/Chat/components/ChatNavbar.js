@@ -14,7 +14,7 @@ const ChatNavbar = () => {
   return (
     <div className='h-screen hidden col-span-1 md:flex flex-col border-purple-600 border-2'>
      <div className='flex justify-center items-center h-28'>
-      <img src={instagramLogo} className='w-10 h-10' alt="" />
+      <img src={instagramLogo} className='w-10 h-10' alt="" /> 
       </div>
       <ul className=''>  
       <Link to="/">

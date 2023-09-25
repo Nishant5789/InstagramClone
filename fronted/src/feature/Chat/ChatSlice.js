@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { HandleModifyRequest, HandleSendRequest, fetchAllRequestByUser } from './notificationApi';
-import { SendMessage, fetchAllUserChats } from './ChatApi';
+import { SendMessage, fetchAllUserChats, fetchChatMsg } from './ChatApi';
 
 const initialState = {
     status: 'idle',
@@ -28,9 +27,9 @@ export const handleSendMsgAsync = createAsyncThunk('chats/handleSendMsgAsync', a
     };
 }
 );
-export const fetchChatMsgAsync = createAsyncThunk('chats/fetchChatMsgAsync', async (chatData) => {
+export const fetchChatMsgAsync = createAsyncThunk('chats/fetchChatMsgAsync', async ({chatData, ChatId}) => {
     try {
-        const { data } = await fetchChatMsg(chatData);
+        const { data } = await fetchChatMsg(chatData, ChatId);
         return data;
     }
     catch (err) {

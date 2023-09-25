@@ -4,9 +4,9 @@ import { getLoggeduserId } from "../../app/constant";
 export function fetchAllRequestByUser() {
     return axios.get(`http://localhost:8080/api/request/${getLoggeduserId()}`);
 }
-export function HandleSendRequest(RecevierUserId, RequestData) {
-    return axios.post(`http://localhost:8080/api/request/createrequest/${getLoggeduserId()}/${RecevierUserId}`,RequestData);
+export function HandleSendRequest(ReceiverId, Msg) {
+    return axios.post(`http://localhost:8080/api/request/createrequest/${getLoggeduserId()}/${ReceiverId}`,{Msg});
 }
-export function HandleModifyRequest(RequestId) {
-    return axios.put(`http://localhost:8080/api/request/${getLoggeduserId()}/${RequestId}`);
+export function HandleModifyRequest({StatusRequest, Msg, RequestId}) {
+    return axios.put(`http://localhost:8080/api/request/${getLoggeduserId()}/${RequestId}`, {StatusRequest, Msg});
 }
