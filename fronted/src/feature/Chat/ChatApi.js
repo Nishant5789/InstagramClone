@@ -2,7 +2,7 @@ import axios from "axios";
 import { getLoggeduserId } from "../../app/constant";
 
 export function fetchAllUserChats() {
-    return axios.get(`http://localhost:8080/api/chat/${getLoggeduserId()}`);
+    return axios.get(`http://localhost:8080/api/chat/getAllUserchats/${getLoggeduserId()}`);
 }
 
 export function SendMessage(chatData, ChatId) {

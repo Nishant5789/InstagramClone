@@ -2,6 +2,7 @@ const express = require("express");
 const connectDb = require("./config/dbConnection");
 const errorHandler = require("./middleware/errorHandler");
 const dotenv = require("dotenv").config();
+const socket = require("socket.io");
 const cors = require('cors');
 
 // authentication library
@@ -23,6 +24,7 @@ connectDb();
 // import routes
 const authRoute = require('./routes/auth');
 const { sanitizeUser, isAuth, cookieExtractor } = require('./services/common');
+const { log } = require("console");
 
 
 const SECRET_KEY = 'SECRET_KEY';
@@ -117,10 +119,32 @@ passport.deserializeUser(function (user, cb) {
     });
 });
 
-
-
-
-
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+const io = socket(server, {
+    cors: {
+      origin: "http://localhost:3000",
+      credentials: true,
+    },
+  });
+  
+  global.onlineUsers = new Map();
+  io.on("connection", (socket) => {
+  
+    global.chatSocket = socket;
+    socket.on("add-user", (userId) => {
+        // console.log("add-user",userId);
+      onlineUsers.set(userId, socket.id);
+    });
+  
+    socket.on("send-msg", (data) => {
+      const sendUserSocket = onlineUsers.get(data.ReceiverUserId);
+    //   console.log(data.ReceiverUserId);
+    //   console.log(sendUserSocket);
+      if (sendUserSocket) {
+        socket.to(sendUserSocket).emit("msg-recieve", data);
+      }
+    });
+  });

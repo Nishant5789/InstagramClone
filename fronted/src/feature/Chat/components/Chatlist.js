@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Avatarpic from '../../../assets/icons/nushrat.jpg'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllUserChatsAsync } from '../ChatSlice';
+import { fetchAllUserChatsAsync, selectAllUserChats } from '../ChatSlice';
 import { getLoggeduserId } from '../../../app/constant';
 
 export const Chatlist = ({setSelectChatId, setSelectedChat}) => {

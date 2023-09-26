@@ -4,7 +4,7 @@ export function getTotalProductsPerPage() {
 }
 
 export function getLoggeduserId(){
-    return "6511bc7730d438cf7f2f9f88";
+    return localStorage.getItem('CurrLoggedUserId');
 }
 
 
