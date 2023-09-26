@@ -9,14 +9,13 @@ const Chat = require("../models/chatModel");
 //@route POST /api/chat/:Chatid/
 //@acsess public
 const addChatMessage = asyncHandler( async (req,res) => {
-    //const chat = await Chat.findById(req.params.ChatId);
-
     try {
         const newChat = await Chat.create({
-            ChatId: req.body.ChatId,
-            SenderUserId: req.body.SenderUserId,
-            ContentMessage: req.body.ContentMessage,
-            ContentType: req.body.ContentType
+            ChatId: req.body.ChatId, 
+            SenderUserId: req.body.SenderUserId,  
+            ReceiverUserId: req.body.ReceiverUserId, 
+            ContentMessage: req.body.ContentMessage, 
+            ContentType: req.body.ContentType 
         })
         // console.log(newChat._id.toString());
             

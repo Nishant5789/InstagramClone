@@ -17,10 +17,11 @@ export const fetchAllUserChatsAsync = createAsyncThunk('chats/fetchAllUserChatsA
     };
 }
 );
-export const handleSendMsgAsync = createAsyncThunk('chats/handleSendMsgAsync', async (chatData) => {
+export const handleSendMsgAsync = createAsyncThunk('chats/handleSendMsgAsync', async ({chatData, ChatId}) => {
     try {
-        const { data } = await SendMessage(chatData);
-        return data;
+        console.log(chatData, ChatId);
+        const { data } = await SendMessage(chatData, ChatId);
+        return chatData;
     }
     catch (err) {
         console.log(err);
