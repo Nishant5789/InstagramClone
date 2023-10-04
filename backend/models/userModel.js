@@ -34,7 +34,7 @@ const userSchema = mongoose.Schema({
             unique: [true,"Email address already taken. "]
         },
         Password: {
-            type: String,
+            type: Buffer,
             required: [true, " Please add your password. "]
         },
         AccType: {
@@ -72,9 +72,6 @@ const userSchema = mongoose.Schema({
         IsCurrentstory :{
             type: Boolean
         },
-        /*CurrentStoryType:{
-            type: String
-        },*/
         Story: {
             type: [ObjectId],
             ref: "Story"
@@ -83,6 +80,7 @@ const userSchema = mongoose.Schema({
             type: [ObjectId],
             ref: "Story"
         },
+        salt: Buffer
     },
     {
         timestamps: true,

@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { handleSendMsgAsync } from '../ChatSlice';
-import { getLoggeduserId } from '../../../app/constant';
+import { selectLoggedInUserId } from '../../Profile/ProfileSlice';
 
 const ChatInput = ({ selectChatId , socket}) => {
 
   const [ChatMsgInput, setChatMsgInput] = useState('');
+  const CurrLoggedUserId = useSelector(selectLoggedInUserId);
+
+
   const dispatch = useDispatch();
   
   const getReceiverUserId = ()=>{
@@ -14,13 +17,13 @@ const ChatInput = ({ selectChatId , socket}) => {
     const firstPart = selectChatId.slice(0, middleIndex);
     const secondPart = selectChatId.slice(middleIndex);
 
-    return getLoggeduserId()!==firstPart ? firstPart:secondPart;
+    return CurrLoggedUserId!==firstPart ? firstPart:secondPart;
   }
 
   const handleSendMsg = () => {
 
     const chatData = {
-      SenderUserId: getLoggeduserId(),
+      SenderUserId: CurrLoggedUserId,
       ReceiverUserId: getReceiverUserId(),
       ContentMessage: ChatMsgInput,
       ContentType: "text",

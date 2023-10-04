@@ -10,24 +10,26 @@ const Story = require("../models/storyModel");
 //@route POST /api/story/createstory/:UserId
 //@acsess public 
 const createStory = asyncHandler(async (req,res) => {
+    const CurrUserId = req.user.id;
+
     try {
         console.log("The request body is : ",req.body);
         const {CurentStory,CurentStoryType,StoryPath} = req.body;
 
-        if(!CurentStory || !CurentStoryType || !CurentStoryType || !req.params.UserId)
+        if(!CurentStory || !CurentStoryType || !CurentStoryType || !CurrUserId)
         {
             res.status(400);
             throw new Error("All fields are required.");
         }
 
         const story1 = await Story.create({
-            User: req.params.UserId,
+            User: CurrUserId,
             CurentStory: CurentStory,
             CurentStoryType: CurentStoryType,
             StoryPath: StoryPath,
         });
         
-        const user1 = await User.findByIdAndUpdate(req.params.UserId,
+        const user1 = await User.findByIdAndUpdate(CurrUserId,
             {
                 $push: { Story: story1._id }, 
             },
@@ -50,8 +52,10 @@ const createStory = asyncHandler(async (req,res) => {
 //@route GET /api/story/getstorybyfollowinguser/:UserId
 //@acsess public 
 const getstorybyfollowinguser = asyncHandler(async (req,res) => {
+    const CurrUserId = req.user.id;
+
     try {
-        const user1 = await User.findById(req.params.UserId);
+        const user1 = await User.findById(CurrUserId);
         const user1Following = user1.FollowingUser;
         console.log({user1Following});
 
@@ -99,8 +103,10 @@ const getstorybyfollowinguser = asyncHandler(async (req,res) => {
 //@route DELETE /api/story/:UserId/:StoryId
 //@acsess public
 const deleteStory = asyncHandler( async (req,res) => {
+    const CurrUserId = req.user.id;
+
     try {
-        const user = await User.findById(req.params.UserId);
+        const user = await User.findById(CurrUserId);
         if(!user)
         {
             res.status(404);
@@ -116,7 +122,7 @@ const deleteStory = asyncHandler( async (req,res) => {
 
         
         await Story.findByIdAndRemove(req.params.StoryId);
-        const user1 = await User.findByIdAndUpdate(req.params.UserId,
+        const user1 = await User.findByIdAndUpdate(CurrUserId,
             {
                 $pull: { Story: story1._id }, // Add the new postid to the AllPost array
             },

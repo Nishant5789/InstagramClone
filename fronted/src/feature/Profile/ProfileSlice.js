@@ -1,14 +1,26 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchUserDetail, handleChangeProfilePic, handleModifyProfile } from './ProfileApi';
+import { fetchUserDetail, fetchUserID, handleChangeProfilePic, handleModifyProfile } from './ProfileApi';
 
 const initialState = {
     status: 'idle',
-    CurrUserProfileDetail: [],
+    CurrUserProfileDetail: null,
+    CurrLoggedInUserId: null
 };
 
 export const fetchUserDetailAsync = createAsyncThunk('profile/fetchUserDetailAsync', async (UserId) => {
     try {
         const { data } = await fetchUserDetail(UserId);
+        return data;
+    }
+    catch (err) {
+        console.log(err);
+    };
+}
+);
+
+export const fetchUserIdAsync = createAsyncThunk('profile/fetchUserIdAsync', async () => {
+    try {
+        const { data } = await fetchUserID();
         return data;
     }
     catch (err) {
@@ -53,10 +65,18 @@ export const profileSlice = createSlice({
                 state.status = 'idle';
                 state.CurrUserProfileDetail = action.payload;
             })
+            .addCase(fetchUserIdAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchUserIdAsync.fulfilled, (state, action) => {
+                state.status = 'idle';
+                state.CurrLoggedInUserId = action.payload.CurrUserId;
+            })
     },
 });
 
 export const selectCurrUserProfileDetail = (state) => state.profile.CurrUserProfileDetail;
+export const selectLoggedInUserId = (state) => state.profile.CurrLoggedInUserId;
 
 
 export default profileSlice.reducer;

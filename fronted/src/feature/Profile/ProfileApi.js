@@ -4,6 +4,10 @@ export function fetchUserDetail(UserId) {
     return axios.get(`http://localhost:8080/api/user/${UserId}`);
 }
 
+export function fetchUserID() {
+    return axios.get(`http://localhost:8080/api/user/getUserID`);
+}
+
 export function handleChangeProfilePic() {
     return axios.get(`http://dummy/api/`);
 }

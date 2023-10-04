@@ -4,14 +4,16 @@ import Messages from './Messages'
 import ChatInput from './ChatInput'
 import { Chatlist } from './Chatlist'
 import { io } from "socket.io-client";
-import { useDispatch } from 'react-redux'
-import { getLoggeduserId } from '../../../app/constant'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectLoggedInUserId } from '../../Profile/ProfileSlice'
 
-const Chatpanel = ({selectedChat,selectChatId}) => {
+const Chatpanel = ({selectedUserChat,selectChatId}) => {
 
     const dispatch = useDispatch();
-    const currentUserId = getLoggeduserId();
+    const currentUserId = useSelector(selectLoggedInUserId);
 
+
+    const  {UserName:selectedUsername, ProfilePhoto: selectedProfilePhoto}  = selectedUserChat;
     useEffect(() => {
         const host = "http://localhost:8080"
         if (currentUserId) {
@@ -27,12 +29,12 @@ const Chatpanel = ({selectedChat,selectChatId}) => {
                     <div className="avatar">
                         <img
                             className="w-16 h-16 rounded-full"
-                            src={Avatarpic}
+                            src={selectedProfilePhoto}
                             alt="avatar"
                         />
                     </div>
                     <div className=" text-xl">
-                        <h3>nishant1399</h3>
+                        <h3>{selectedUsername}</h3>
                     </div>
                 </div>
                 <Messages selectChatId={selectChatId} socket={WebSocket} />

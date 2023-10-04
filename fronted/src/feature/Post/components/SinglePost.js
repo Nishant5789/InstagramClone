@@ -5,14 +5,16 @@ import WhiteheartLogo from '../../../assets/icons/whiteheartLogo.png'
 import SendMsg from '../../../assets/icons/sendMsg.png'
 import Commenticon from '../../../assets/icons/Commenticon.png'
 import SaveInstagram from '../../../assets/icons/save-instagram.png'
-import { getLoggeduserId } from '../../../app/constant'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { handleCommentPostAsync, handleLikePostAsync } from '../Postslice'
+import { selectLoggedInUserId } from '../../Profile/ProfileSlice'
 
 const SinglePost = ({ post }) => {
 
     const dispatch = useDispatch();
     const [Commentcontent, setCommentData] = useState();
+    const CurrLoggedUserId = useSelector(selectLoggedInUserId);
+
 
     // console.log(post);
     const { PostType, Comment, Caption, PostPath, UserId, LikedByUsers, TotalLikes, id: postID } = post;
@@ -32,7 +34,7 @@ const SinglePost = ({ post }) => {
     useEffect(() => {
         if (LikedByUsers) {
             // console.log(LikedByUsers);
-            if (LikedByUsers.includes(getLoggeduserId()))
+            if (LikedByUsers.includes(CurrLoggedUserId));
                 setIsLiked(true);
         }
     }, [isLiked, LikedByUsers])

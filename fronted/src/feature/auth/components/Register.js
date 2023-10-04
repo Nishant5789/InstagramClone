@@ -5,14 +5,22 @@ import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { gettoastOptions } from '../../../app/constant';
 import { useDispatch, useSelector } from 'react-redux';
-// import { createUserAsync, selectLoggedInUser } from '../authSlice';
+import { createUserAsync  } from '../authSlice';
+import { fetchUserIdAsync, selectLoggedInUserId } from '../../Profile/ProfileSlice';
 
 const Register = () => {
   const dispatch = useDispatch();
-  // const user = useSelector(selectLoggedInUser);
+  const CurrLoggedUserId = useSelector(selectLoggedInUserId);
+
+
   const registerObject = {
-    email: "",
-    password: "",
+    UserName:"",
+    FirstName:"",
+    LastName:"",
+    DoB:"",
+    Gender:"",
+    Email: "",
+    Password: "",
     confirm_password: "",
   }
 
@@ -22,49 +30,53 @@ const Register = () => {
     setRegisterData({ ...registerData, [event.target.name]: event.target.value });
   }
 
-  const handleValidation = ({
-    Email,
-    Password,
-    ConfirmPassword,
-  }) => {
-    const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-    if(Email=="") {
-      toast.error("All field is require", gettoastOptions());
-      return false;
-    }
-    else if(Password=="") {
-      toast.error("All field is require", gettoastOptions());
-      return false;
-    }
-    else if(ConfirmPassword=="") {
-      toast.error("All field is require", gettoastOptions());
-      return false;
-    }
-    else if (Password !== ConfirmPassword) {
-      toast.error("Password didn't match", gettoastOptions());
-      return false;
-    } else if (Password.length <= 4) {
-      toast.error("Password Length should be greater than 4", gettoastOptions());
-      return false;
-    } else if (!emailRegex.test(Email)) {
-      toast.error("Email format should be right", gettoastOptions());
-      return false;
-    }
-    return true;
-  };
+  // const handleValidation = ({
+  //   Email,
+  //   Password,
+  //   ConfirmPassword,
+  // }) => {
+  //   const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+  //   if(Email==="") {
+  //     toast.error("All field is require", gettoastOptions());
+  //     return false;
+  //   }
+  //   else if(Password==="") {
+  //     toast.error("All field is require", gettoastOptions());
+  //     return false;
+  //   }
+  //   else if(ConfirmPassword==="") {
+  //     toast.error("All field is require", gettoastOptions());
+  //     return false;
+  //   }
+  //   else if (Password !== ConfirmPassword) {
+  //     toast.error("Password didn't match", gettoastOptions());
+  //     return false;
+  //   } else if (Password.length <= 4) {
+  //     toast.error("Password Length should be greater than 4", gettoastOptions());
+  //     return false;
+  //   } else if (!emailRegex.test(Email)) {
+  //     toast.error("Email format should be right", gettoastOptions());
+  //     return false;
+  //   }
+  //   return true;
+  // };
 
   const handdleRegister = (e) => {
     e.preventDefault();
     console.log("submit");
-    const { email: Email, password: Password, confirm_password: ConfirmPassword } = registerData;
-    if (handleValidation({ Email, Password, ConfirmPassword })) {
-      console.log("validated");
-      // dispatch(createUserAsync({ email: registerData.email, password: registerData.password}));
-    }
+    console.log({ ...registerData, Email: registerData.Email, Password: registerData.Password});
+    // const { Email: Email, Password: Password, confirm_password: ConfirmPassword } = registerData;
+    // if (handleValidation({ Email, Password, ConfirmPassword })) {
+    //   console.log("validated");
+    // }
+    dispatch(createUserAsync({ ...registerData}));
+    setTimeout(() => {
+      dispatch(fetchUserIdAsync());
+    }, 1000);
   };
   return (
     <>
-    {/* {user && <Navigate to="/" replace={true} />} */}
+    {CurrLoggedUserId && <Navigate to="/" replace={true}/>}
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-300">
         <div className="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
           <div className="font-medium self-center text-xl sm:text-2xl uppercase text-gray-800">
@@ -72,11 +84,12 @@ const Register = () => {
           </div>
           <div className="mt-10">
             <form onSubmit={handdleRegister}>
-              <div className="flex flex-col mb-6">
+
+            <div className="flex flex-col mb-6">
                 <label
-                  htmlFor="email"
+                  htmlFor="UserName"
                   className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">
-                  E-Mail Address:
+                  UserName:
                 </label>
                 <div className="relative">
                   <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
@@ -92,20 +105,181 @@ const Register = () => {
                     </svg>
                   </div>
                   <input
-                    id="email"
-                    type="email"
-                    name="email"
+                    id="UserName"
+                    name="UserName"
+                    type="text"
                     required="true"
-                    value={registerData.email}
+                    value={registerData.UserName}
                     onChange={handlechange}
                     className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
-                    placeholder="E-Mail Address"
+                    placeholder="UserName"
                   />
                 </div>
               </div>
+
               <div className="flex flex-col mb-6">
                 <label
-                  htmlFor="password"
+                  htmlFor="FirstName"
+                  className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">
+                  FirstName
+                </label>
+                <div className="relative">
+                  <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
+                    <svg
+                      className="h-6 w-6"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                    </svg>
+                  </div>
+                  <input
+                    id="FirstName"
+                    type="text"
+                    name="FirstName"
+                    required="true"
+                    value={registerData.FirstName}
+                    onChange={handlechange}
+                    className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
+                    placeholder="FirstName"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col mb-6">
+                <label
+                  htmlFor="LastName"
+                  className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">
+                  LastName
+                </label>
+                <div className="relative">
+                  <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
+                    <svg
+                      className="h-6 w-6"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                    </svg>
+                  </div>
+                  <input
+                    id="LastName"
+                    type="text"
+                    name="LastName"
+                    required="true"
+                    value={registerData.LastName}
+                    onChange={handlechange}
+                    className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
+                    placeholder="LastName"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col mb-6">
+                <label
+                  htmlFor="DoB"
+                  className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">
+                  DoB
+                </label>
+                <div className="relative">
+                  <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
+                    <svg
+                      className="h-6 w-6"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                    </svg>
+                  </div>
+                  <input
+                    id="DoB"
+                    type="date"
+                    name="DoB"
+                    required="true"
+                    value={registerData.DoB}
+                    onChange={handlechange}
+                    className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
+                    placeholder="LastName"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col mb-6">
+                <label
+                  htmlFor="Gender"
+                  className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">
+                  Gender
+                </label>
+                <div className="relative">
+                  <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
+                    <svg
+                      className="h-6 w-6"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                    </svg>
+                  </div>
+                  <input
+                    id="Gender"
+                    type="text"
+                    name="Gender"
+                    required="true"
+                    value={registerData.Gender}
+                    onChange={handlechange}
+                    className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
+                    placeholder="Gender"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col mb-6">
+                <label
+                  htmlFor="Email"
+                  className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">
+                  Email
+                </label>
+                <div className="relative">
+                  <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
+                    <svg
+                      className="h-6 w-6"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                    </svg>
+                  </div>
+                  <input
+                    id="Email"
+                    type="email"
+                    name="Email"
+                    required="true"
+                    value={registerData.Email}
+                    onChange={handlechange}
+                    className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
+                    placeholder="Email"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col mb-6">
+                <label
+                  htmlFor="Password"
                   className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">
                   Password:
                 </label>
@@ -125,10 +299,10 @@ const Register = () => {
                     </span>
                   </div>
                   <input
-                    id="password"
+                    id="Password"
                     type="password"
-                    name="password"
-                    value={registerData.password}
+                    name="Password"
+                    value={registerData.Password}
                     onChange={handlechange}
                     className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
                     placeholder="Password"
@@ -163,24 +337,16 @@ const Register = () => {
                     value={registerData.confirm_password}
                     onChange={handlechange}
                     className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
-                    placeholder="confirm password"
+                    placeholder="confirm Password"
                   />
                 </div>
               </div>
-              <div className="flex items-center mb-6 -mt-4">
-                <div className="flex ml-auto">
-                  <Link
-                    to="#"
-                    className="inline-flex text-xs sm:text-sm text-blue-500 hover:text-blue-700">
-                    Forgot Your Password?
-                  </Link>
-                </div>
-              </div>
+             
               <div className="flex w-full">
                 <button
                   type="submit"
                   className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded py-2 w-full transition duration-150 ease-in">
-                  <span className="mr-2 uppercase">Login</span>
+                  <span className="mr-2 uppercase">Register</span>
                   <span>
                     <svg
                       className="h-6 w-6"

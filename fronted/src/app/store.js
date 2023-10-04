@@ -5,6 +5,7 @@ import SearchSlice from '../feature/Search/SearchSlice';
 import StorySlice from '../feature/Status/StatusSlice';
 import ProfileSlice from '../feature/Profile/ProfileSlice';
 import ChatSlice from '../feature/Chat/ChatSlice';
+import authSlice from '../feature/auth/authSlice';
 
 
 const store = configureStore({
@@ -14,7 +15,8 @@ const store = configureStore({
     search: SearchSlice, 
     status: StorySlice,
     profile: ProfileSlice,
-    chat: ChatSlice
+    chat: ChatSlice,
+    auth: authSlice
   },
 });
 

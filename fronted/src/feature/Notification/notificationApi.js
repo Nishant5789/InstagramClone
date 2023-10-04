@@ -1,12 +1,11 @@
 import axios from "axios";
-import { getLoggeduserId } from "../../app/constant";
 
 export function fetchAllRequestByUser() {
-    return axios.get(`http://localhost:8080/api/request/${getLoggeduserId()}`);
+    return axios.get(`http://localhost:8080/api/request/`);
 }
 export function HandleSendRequest(ReceiverId, Msg) {
-    return axios.post(`http://localhost:8080/api/request/createrequest/${getLoggeduserId()}/${ReceiverId}`,{Msg});
+    return axios.post(`http://localhost:8080/api/request/createrequest/${ReceiverId}`,{Msg});
 }
 export function HandleModifyRequest({StatusRequest, Msg, RequestId}) {
-    return axios.put(`http://localhost:8080/api/request/${getLoggeduserId()}/${RequestId}`, {StatusRequest, Msg});
+    return axios.put(`http://localhost:8080/api/request/${RequestId}`, {StatusRequest, Msg});
 }

@@ -4,8 +4,8 @@ const router = express.Router();
 const {addChatMessage,getchat, getAllUserChats} = require("../controllers/chatControllers");
 
 router.route("/:chatId").get(getchat);
-router.route("/:UserId").post(addChatMessage);
-router.route("/getAllUserchats/:UserID").get(getAllUserChats);
+router.route("/:chatId").post(addChatMessage);
+router.route("/getAllUserchats/").get(getAllUserChats);
 
 /*
 router.route("/like/:UserId/:PostId").put(likePost);
