@@ -2,42 +2,35 @@ const crypto = require('crypto');
 const { sanitizeUser } = require('../services/common');
 const SECRET_KEY = 'SECRET_KEY';
 const jwt = require('jsonwebtoken');
-const { User } = require('../models/userModel');
+const User = require('../models/userModel');
 
 module.exports.creatUser = async (req, res) => {
     try {
-        const user = new User(req.body);
-        await user.save();
-        return res.status(200).json(user);
+        const salt = crypto.randomBytes(16);
+        crypto.pbkdf2(req.body.Password, salt, 310000, 32, 'sha256', async function (err, hashedPassword) {
+            const user = new User({ ...req.body, Password: hashedPassword, salt });
+            // console.log(user);
+            const docs = await user.save();
+
+            // res.status(200).json(docs);
+
+            // which used to create a sesssion after register 
+            // this also called serilize user and desialize user dduring try to crate session 
+            req.login(sanitizeUser(docs), (err) => {
+                if (err) {
+                    return res.status(400).json(err);
+                }
+                else {
+                    const token = jwt.sign(sanitizeUser(docs), SECRET_KEY);
+                    res.cookie("jwt", token, { expire: 360000 + Date.now(), httponly: true });
+                    return res.status(200).json(token);
+                }
+            });
+        })
     } catch (error) {
         console.log(error);
         return res.status(400).json(error);
     }
-
-    // try {
-    //     const salt = crypto.randomBytes(16);
-    //     crypto.pbkdf2(req.body.password, salt, 310000, 32, 'sha256', async function (err, hashedPassword) {
-    //         const user = new User({ ...req.body, password: hashedPassword, salt });
-    //         // console.log(user);
-    //         const docs = await user.save();
-
-    //         // which used to create a sesssion after register 
-    //         // this also called serilize user and desialize user dduring try to crate session 
-    //         req.login(sanitizeUser(docs), (err) => {
-    //             if (err) {
-    //                 return res.status(400).json(err);
-    //             }
-    //             else {
-    //                 const token = jwt.sign(sanitizeUser(docs), SECRET_KEY);
-    //                 res.cookie("jwt", token, { expire: 360000 + Date.now(), httponly: true });
-    //                 return res.status(200).json(token);
-    //             }
-    //         });
-    //     })
-    // } catch (error) {
-    //     console.log(error);
-    //     return res.status(400).json(error);
-    // }
 }
 
 module.exports.loginUser = async (req, res, next) => {

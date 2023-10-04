@@ -6,10 +6,11 @@ const Comment = require("../models/commentModel");
 
 
 //@dec Get all posts
-//@route GET /api/post/:UserId
+//@route GET /api/post/
 //@acsess public 
 const getPosts = asyncHandler(async (req, res) => {
-    const posts = await Post.find({ UserId: req.params.UserId }).populate(
+    const CurrUserId = req.user.id;
+    const posts = await Post.find({ UserId: CurrUserId }).populate(
         {
             path: 'Comment',
             populate: {
@@ -23,10 +24,10 @@ const getPosts = asyncHandler(async (req, res) => {
 
 
 //@dec Create new post
-//@route POST /api/post/createpost/:UserId
+//@route POST /api/post/createpost
 //@acsess public 
 const createPost = asyncHandler(async (req, res) => {
-
+    const CurrUserId = req.user.id;
     try{
         console.log("The request body is : ",req.body);
         const {PostType,PostPath,Taggeduser} = req.body;
@@ -38,12 +39,12 @@ const createPost = asyncHandler(async (req, res) => {
         }
 
         const post1 = await Post.create({
-            UserId: req.params.UserId,
+            UserId: CurrUserId,
             ...req.body,
             TotalLikes: 0,
         });
 
-        const user1 = await User.findByIdAndUpdate(req.params.UserId,
+        const user1 = await User.findByIdAndUpdate(CurrUserId,
             {
                 $push: { AllPost: post1.id }, // Add the new postid to the AllPost array
             },
@@ -59,11 +60,12 @@ const createPost = asyncHandler(async (req, res) => {
 });
 
 //@dec delete a post
-//@route DELETE /api/post/:UserId/:PostId
+//@route DELETE /api/post/:PostId
 //@acsess public
 const deletePost = asyncHandler(async (req, res) => {
+    const CurrUserId = req.user.id;
     try {
-        const user = await User.findById(req.params.UserId);
+        const user = await User.findById(CurrUserId);
         if (!user) {
             res.status(400).json({ msg: "User not found." });
             throw new Error("User not found.");
@@ -77,7 +79,7 @@ const deletePost = asyncHandler(async (req, res) => {
 
 
         await Post.findByIdAndRemove(req.params.PostId);
-        const user1 = await User.findByIdAndUpdate(req.params.UserId,
+        const user1 = await User.findByIdAndUpdate(CurrUserId,
             {
                 $pull: { AllPost: post1._id }, // Add the new postid to the AllPost array
             },
@@ -93,9 +95,11 @@ const deletePost = asyncHandler(async (req, res) => {
 });
 
 //@dec comment in post
-//@route DELETE /api/post/comment/:UserId/:PostId
+//@route DELETE /api/post/comment/:PostId
 //@acsess public
 const commentPost = asyncHandler(async (req, res) => {
+    const CurrUserId = req.user.id;
+
     try {
         console.log("The request body is : ", req.body);
         const { Commentcontent } = req.body;
@@ -105,7 +109,7 @@ const commentPost = asyncHandler(async (req, res) => {
             throw new Error("All fields are required.");
         }
 
-        const user = await User.findById(req.params.UserId);
+        const user = await User.findById(CurrUserId);
         if (!user) {
             res.status(404).json({ msg: "User not found." });;;
             throw new Error("User not found.");
@@ -119,7 +123,7 @@ const commentPost = asyncHandler(async (req, res) => {
 
         const comment1 = await Comment.create({
             CommentContent: Commentcontent,
-            CommentedBy: req.params.UserId,
+            CommentedBy: CurrUserId,
         });
 
         const post2 = await Post.findByIdAndUpdate(req.params.PostId,
@@ -139,12 +143,13 @@ const commentPost = asyncHandler(async (req, res) => {
 });
 
 //@dec like a post
-//@route PUT /api/post/like/:UserId/:PostId
+//@route PUT /api/post/like/:PostId
 //@acsess public
 const likePost = asyncHandler(async (req, res) => {
+    const CurrUserId = req.user.id;
 
     try {
-        const user = await User.findById(req.params.UserId);
+        const user = await User.findById(CurrUserId);
         if (!user) {
             res.status(404).json({ msg: "User not found." });
         }
@@ -156,13 +161,13 @@ const likePost = asyncHandler(async (req, res) => {
         }
 
         // Check if the user has already liked the post
-        if (post1.LikedByUsers.includes(req.params.UserId)) {
+        if (post1.LikedByUsers.includes(CurrUserId)) {
             res.status(400).json({ msg: "User has already liked this post." });
             throw new Error("User has already liked this post.");
         }
 
         // Add the user's ID to the LikedByUsers array
-        post1.LikedByUsers.push(req.params.UserId);
+        post1.LikedByUsers.push(CurrUserId);
 
         // Update the TotalLikes count
         post1.TotalLikes = post1.LikedByUsers.length;

@@ -5,17 +5,17 @@ import Chatpanel from '../feature/Chat/components/Chatpanel'
 
 const Chat = () => {
   
-  const [selectedChat, setSelectedChat] = useState(-1);
+  const [selectedUserChat, setSelectedUserChat] = useState(null);
   const [selectChatId, setSelectChatId] = useState(null);
 
   return (
     <div className='grid grid-cols-12'>
      <ChatNavbar/>
-     <Chatlist  setSelectChatId={setSelectChatId} setSelectedChat={setSelectedChat} />
+     <Chatlist  setSelectChatId={setSelectChatId} setSelectedUserChat={setSelectedUserChat} />
      {
-        selectedChat===-1 ? 
+        selectedUserChat===null ? 
         <div className='col-span-10 md:col-span-9 lg:col-span-7 flex justify-center items-center'>Select UserChat</div>
-        : <Chatpanel selectedChat={selectedChat} selectChatId={selectChatId}/>
+        : <Chatpanel selectedUserChat={selectedUserChat} selectChatId={selectChatId}/>
      }
     </div>
   )

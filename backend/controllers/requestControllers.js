@@ -4,26 +4,29 @@ const mongoose = require('mongoose');
 const User = require("../models/userModel");
 
 //@dec Get all requests
-//@route GET /api/request/:UserId
+//@route GET /api/request/
 //@acsess public 
 const getRequests = asyncHandler(async (req, res) => {
-    const requests = await Request.find({ RequestReceiverUser: req.params.UserId }).populate("RequestReceiverUser").populate("RequestSenderUser");//.sort(timestamps);
+    const CurrUserId = req.user.id;
+    const requests = await Request.find({ RequestReceiverUser: CurrUserId }).populate("RequestReceiverUser").populate("RequestSenderUser");//.sort(timestamps);
     res.status(200).json(requests);
 });
 
 
 //@dec Create new Request
-//@route POST /api/request/createrequest/:UserId/:ReceiverId
+//@route POST /api/request/createrequest/:ReceiverId
 //@acsess public 
 const createRequest = asyncHandler(async (req, res) => {
+    const CurrUserId = req.user.id;
+
     try {
         console.log("The request body is : ", req.body);
         const { Msg } = req.body;
-        console.log(req.params.UserId);
+        console.log(CurrUserId);
         console.log(req.params.ReceiverId);
 
         const existingRequest = await Request.findOne({
-            RequestSenderUser: req.params.UserId,
+            RequestSenderUser: CurrUserId,
             RequestReceiverUser: req.params.ReceiverId,
         });
 
@@ -32,7 +35,7 @@ const createRequest = asyncHandler(async (req, res) => {
         }
 
         const request1 = await Request.create({
-            RequestSenderUser: req.params.UserId,
+            RequestSenderUser: CurrUserId,
             RequestReceiverUser: req.params.ReceiverId,
             IsFollowback: false,
             StatusRequest: "Pending",
@@ -56,11 +59,13 @@ const createRequest = asyncHandler(async (req, res) => {
 //@route PUT /api/request/:UserId/:RequestId
 //@acsess public
 const updateRequest = asyncHandler(async (req, res) => {
+    const CurrUserId = req.user.id;
+
     try {
         const currRequestId = new mongoose.Types.ObjectId(req.params.RequestId);
         const currRequest = await Request.findOne({
             _id: currRequestId,
-            RequestReceiverUser: req.params.UserId
+            RequestReceiverUser: CurrUserId
         })
         console.log(currRequest);
 

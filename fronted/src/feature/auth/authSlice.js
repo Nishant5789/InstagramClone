@@ -1,18 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { checkUser, createUser, loginUser } from './authApi';
-// import {
-// //   loginUser,
-//   createUser,
-// //   signOut,
-// //   checkAuth,
-// //   resetPasswordRequest,
-// //   resetPassword,
-// } from './authAPi';
-// import { updateUser } from '../user/userAPI';
+
 
 const initialState = {
   loggedInUserToken: null, // this should only contain user identity => 'id'/'role'
-//   loggedInUser: null,
   status: 'idle',
   error: null,
 //   userChecked: false,
@@ -21,20 +12,18 @@ const initialState = {
 };
 
 export const createUserAsync = createAsyncThunk(
-  'user/createUser',
+  'auth/createUser',
   async (userData) => {
     const response = await createUser(userData);
-    localStorage.setItem('jwt', response.data);
     return response.data;
   }
 );
 
 export const loginUserAsync = createAsyncThunk(
-  'user/loginUser',
+  'auth/loginUser',
   async (loginInfo, { rejectWithValue }) => {
     try {
       const response = await loginUser(loginInfo);
-      localStorage.setItem('jwt', response.data);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -43,7 +32,7 @@ export const loginUserAsync = createAsyncThunk(
   }
 );
 
-export const checkUserAsync = createAsyncThunk('user/checkUser', async (loginData, { rejectWithValue }) => {
+export const checkUserAsync = createAsyncThunk('auth/checkUser', async (loginData, { rejectWithValue }) => {
     try {
       const response = await checkUser(loginData);
       return response.data;
@@ -53,20 +42,17 @@ export const checkUserAsync = createAsyncThunk('user/checkUser', async (loginDat
     }
   });
 
-
-
-
-// export const signOutAsync = createAsyncThunk(
-//   'user/signOut',
-//   async () => {
-//     const response = await signOut();
-//     // The value we return becomes the `fulfilled` action payload
-//     return response.data;
-//   }
-// );
+export const signOutAsync = createAsyncThunk(
+  'auth/signOut',
+  async () => {
+    // const response = await signout();
+    // The value we return becomes the `fulfilled` action payload
+    // return response.data;
+  }
+);
 
 export const authSlice = createSlice({
-  name: 'user',
+  name: 'auth',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -90,16 +76,16 @@ export const authSlice = createSlice({
         console.log(action.payload);
         state.error = action.payload;
       })
-    //   .addCase(signOutAsync.pending, (state) => {
-    //     state.status = 'loading';
-    //   })
-    //   .addCase(signOutAsync.fulfilled, (state, action) => {
-    //     state.status = 'idle';
-    //     state.loggedInUserToken = null;
-    //   })
+      .addCase(signOutAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(signOutAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.loggedInUserToken = null;
+      })
       .addCase(loginUserAsync.pending, (state) => {
             state.status = 'loading';
-          })
+      })
       .addCase(loginUserAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.loggedInUserToken = action.payload;

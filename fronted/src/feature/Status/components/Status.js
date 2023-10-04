@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Sampleavatar from '../../../assets/icons/Sampleavatar.png'
 import AddLogo from '../../../assets/icons/AddLogo.png'
 import StatusModal from './StatusModal'
 import StatusUploadModal from './StatusUploadModal';

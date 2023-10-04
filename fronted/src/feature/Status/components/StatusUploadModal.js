@@ -7,7 +7,7 @@ import { gettoastOptions } from '../../../app/constant';
 import { toast } from 'react-toastify';
 import { createStatusAsync, selectStoryUploadstatus } from '../StatusSlice';
 
-const StatusUploadModal = ({SetIsopenStatus}) => {
+const StatusUploadModal = ({SetIsopenploadStatus}) => {
 
     const dispatch = useDispatch();
     const [Caption, setCaption] = useState('');
@@ -51,7 +51,7 @@ const StatusUploadModal = ({SetIsopenStatus}) => {
             "StoryPath": statusImageUrl
           }));
           setIsSendStatus(true); 
-          SetIsopenStatus(false);
+          SetIsopenploadStatus(false);
       }
       else{
         if(statusImageUrl===""){
@@ -114,7 +114,7 @@ const StatusUploadModal = ({SetIsopenStatus}) => {
           <div className='flex p-2 items-center gap-x-4 px-2'>
             <img src={StatusPic} className='w-12 h-12 rounded-full' alt="" />
             <h1 className='flex-grow'>nishant12321</h1>
-            <span onClick={() => SetIsopenStatus(false)}>
+            <span onClick={() => SetIsopenploadStatus(false)}>
               <CloseIcon sx={{ fontSize: 40 }} />
             </span>
           </div>

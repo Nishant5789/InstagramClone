@@ -27,9 +27,11 @@ const addChatMessage = asyncHandler( async (req,res) => {
     }
     
 });
+
 const getAllUserChats = asyncHandler( async (req,res) => {
+    const CurrUserId = req.user.id;
     try {
-        const CurrUser = await User.findById(req.params.UserID).populate("FollowingUser").populate("FollowersUser");
+        const CurrUser = await User.findById(CurrUserId).populate("FollowingUser").populate("FollowersUser");
     
         const FollowingUser = CurrUser.FollowingUser;
         const FollowersUser = CurrUser.FollowersUser;

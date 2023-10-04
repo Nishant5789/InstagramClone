@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import SinglePost from './SinglePost'
 import { fetchAllPostsByUserAsync, selectuserAllPosts } from '../Postslice';
 import { useEffect } from 'react';
-import { getLoggeduserId } from '../../../app/constant';
 import Postmodal from './Postmodal';
 
 

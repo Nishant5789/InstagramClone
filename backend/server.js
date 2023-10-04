@@ -3,6 +3,7 @@ const connectDb = require("./config/dbConnection");
 const errorHandler = require("./middleware/errorHandler");
 const dotenv = require("dotenv").config();
 const socket = require("socket.io");
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 // authentication library
@@ -15,6 +16,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const jwt = require('jsonwebtoken');
 
 
+const User = require("./models/userModel");
 const app = express();
 const port = process.env.PORT || 5001;
 
@@ -33,18 +35,17 @@ var opts = {}
 opts.jwtFromRequest = cookieExtractor;
 opts.secretOrKey = SECRET_KEY;
 
-
-
+// middleware
 app.use(express.json());
+app.use(express.static("build"));
+app.use(cookieParser());
 app.use(session({
     secret: 'keyboard cat',
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
 }));
 app.use(passport.authenticate('session'));
-app.use(cors({
-    exposedHeaders: ['X-Total-Count']
-}));
+app.use(cors());
 
 app.get('/', (req, res) => {
     res.send("connected");
@@ -52,26 +53,33 @@ app.get('/', (req, res) => {
 
 app.use(errorHandler);
 // handle routes 
-app.use('/api/auth', authRoute);
-app.use("/api/user",require("./routes/userRoutes"));
-app.use('/api/auth', authRoute);
-app.use('/api/post',require("./routes/postRoutes"));
-app.use('/api/chat',require("./routes/chatRoutes"));
-app.use('/api/story',require("./routes/storyRoutes"));
-app.use('/api/request',require("./routes/requestRoutes"));
+app.use('/auth', authRoute);
+app.use("/api/user",isAuth(),require("./routes/userRoutes"));
+app.use('/api/post',isAuth(),require("./routes/postRoutes"));
+app.use('/api/chat',isAuth(),require("./routes/chatRoutes"));
+app.use('/api/story',isAuth(),require("./routes/storyRoutes"));
+app.use('/api/request',isAuth(), require("./routes/requestRoutes"));
 
-// handle llogin 
+// app.use('/auth', authRoute);
+// app.use("/api/user",require("./routes/userRoutes"));
+// app.use('/api/post',require("./routes/postRoutes"));
+// app.use('/api/chat',require("./routes/chatRoutes"));
+// app.use('/api/story',require("./routes/storyRoutes"));
+// app.use('/api/request', require("./routes/requestRoutes"));
+
+// handle login 
 passport.use(new LocalStrategy(
-    { usernameField: 'email' },
-    async function (email, password, done) {
+    { usernameField: 'Email' , passwordField: "Password"},
+    async function (Email, Password, done) {
         try {
-            const user = await User.findOne({ email: email });
+            // console.log(Email, Password);
+            const user = await User.findOne({ Email: Email });
             if (user == null) {
                 // done(iserror, isautorised, error message)
                 return done(null, false, { message: 'invalid credentials' });
             }
-            crypto.pbkdf2(password, user.salt, 310000, 32, 'sha256', async function (err, hashedPassword) {
-                if (!crypto.timingSafeEqual(user.password, hashedPassword)) {
+            crypto.pbkdf2(Password, user.salt, 310000, 32, 'sha256', async function (err, hashedPassword) {
+                if (!crypto.timingSafeEqual(user.Password, hashedPassword)) {
                     return done(null, false, { message: 'invalid credentials' });
                 }
                 const token = jwt.sign(sanitizeUser(user), SECRET_KEY);
@@ -106,7 +114,7 @@ passport.use('jwt', new JwtStrategy(opts, async function (jwt_payload, done) {
 // this creates session variable req.user on being called from callbacks
 passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
-        // console.log("serialize", user);
+        console.log("serialize", user);
         return cb(null, user);
     });
 });
@@ -114,7 +122,7 @@ passport.serializeUser(function (user, cb) {
 // this changes session variable req.user when called from authorized request
 passport.deserializeUser(function (user, cb) {
     process.nextTick(function () {
-        // console.log("deserialize", user);
+        console.log("deserialize", user);
         return cb(null, user);
     });
 });
