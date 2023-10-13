@@ -12,20 +12,22 @@ const Posts = () => {
 
   // console.log(posts);
 
-  useEffect(()=>{
+  useEffect(() => {
+    setTimeout(() => {
       dispatch(fetchAllPostsByUserAsync());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+    }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
-    <div className='space-y-6'>
-      {
-        posts.map((post) => {
-          return <SinglePost post={post} key={post.id}/>
-        })
-      }
-    </div>
+      <div className='space-y-6 mb-28 bg-slate-50'>
+        {
+          posts.map((post) => {
+            return <SinglePost post={post} key={post.id} />
+          })
+        }
+      </div>
     </>
   )
 }

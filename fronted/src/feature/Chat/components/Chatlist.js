@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllUserChatsAsync, selectAllUserChats } from '../ChatSlice';
 import { getLoggeduserId } from '../../../app/constant';
-import { selectLoggedInUserId } from '../../Profile/ProfileSlice';
+import { fetchUserDetailAsync, selectCurrUserProfileDetail, selectLoggedInUserId } from '../../Profile/ProfileSlice';
 
 export const Chatlist = ({setSelectChatId, setSelectedUserChat}) => {
   const dispatch = useDispatch();
   const AllUserChats = useSelector(selectAllUserChats);
   const CurrLoggedUserId = useSelector(selectLoggedInUserId);
+  const ProfileData = useSelector(selectCurrUserProfileDetail);
+
+
 
 
   function getChatId(str1, str2) {
@@ -27,12 +30,13 @@ export const Chatlist = ({setSelectChatId, setSelectedUserChat}) => {
 
   useEffect(() => {
     dispatch(fetchAllUserChatsAsync());
+    dispatch(fetchUserDetailAsync(CurrLoggedUserId));
   }, []);
 
   return (
     <div className='border-2  md:flex col-span-12 flex-col h-screen border-purple-500 md:col-span-2 lg:col-span-4'>
       <div className='p-6 border-b-2  space-y-3'>
-        <h1 className='lg:text-2xl font-semibold text-center lg:text-left  font-sans'>{CurrLoggedUserId}</h1>
+        <h1 className='lg:text-2xl font-semibold text-center lg:text-left  font-sans'>{ProfileData && ProfileData.UserName}</h1>
       </div>
       <ul className='md:hidden flex  lg:flex lg:px-6 py-2 justify-around items-center'>
         <li className='text-2xl font-serif font-semibold '>Messages</li>
@@ -53,9 +57,6 @@ export const Chatlist = ({setSelectChatId, setSelectedUserChat}) => {
             </div>);
           })
         }
-        {/* <Link to="/chat/123321">
-
-    </Link> */}
       </div>
     </div>
   )

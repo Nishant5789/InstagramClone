@@ -26,7 +26,6 @@ connectDb();
 // import routes
 const authRoute = require('./routes/auth');
 const { sanitizeUser, isAuth, cookieExtractor } = require('./services/common');
-const { log } = require("console");
 
 
 const SECRET_KEY = 'SECRET_KEY';
@@ -60,12 +59,6 @@ app.use('/api/chat',isAuth(),require("./routes/chatRoutes"));
 app.use('/api/story',isAuth(),require("./routes/storyRoutes"));
 app.use('/api/request',isAuth(), require("./routes/requestRoutes"));
 
-// app.use('/auth', authRoute);
-// app.use("/api/user",require("./routes/userRoutes"));
-// app.use('/api/post',require("./routes/postRoutes"));
-// app.use('/api/chat',require("./routes/chatRoutes"));
-// app.use('/api/story',require("./routes/storyRoutes"));
-// app.use('/api/request', require("./routes/requestRoutes"));
 
 // handle login 
 passport.use(new LocalStrategy(
@@ -93,7 +86,7 @@ passport.use(new LocalStrategy(
     }
 ));
 
-//handle all  request
+//handle all request
 passport.use('jwt', new JwtStrategy(opts, async function (jwt_payload, done) {
     console.log(jwt_payload);
     try {
@@ -133,7 +126,7 @@ const server = app.listen(port, () => {
 
 const io = socket(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: "http://localhost:8080",
       credentials: true,
     },
   });
@@ -143,14 +136,14 @@ const io = socket(server, {
   
     global.chatSocket = socket;
     socket.on("add-user", (userId) => {
-        // console.log("add-user",userId);
+        console.log("add-user",userId);
       onlineUsers.set(userId, socket.id);
     });
   
     socket.on("send-msg", (data) => {
       const sendUserSocket = onlineUsers.get(data.ReceiverUserId);
-    //   console.log(data.ReceiverUserId);
-    //   console.log(sendUserSocket);
+      console.log(data.ReceiverUserId);
+      console.log(sendUserSocket);
       if (sendUserSocket) {
         socket.to(sendUserSocket).emit("msg-recieve", data);
       }

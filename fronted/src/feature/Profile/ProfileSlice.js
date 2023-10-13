@@ -40,9 +40,9 @@ export const handleChangeProfilePicAsync = createAsyncThunk('profile/handleChang
 }
 );
 
-export const handleModifyProfileAsync = createAsyncThunk('profile/handleModifyProfileAsync', async () => {
+export const handleModifyProfileAsync = createAsyncThunk('profile/handleModifyProfileAsync', async (updateDetail) => {
     try {
-        const { data } = handleModifyProfile();
+        const { data } = await handleModifyProfile(updateDetail);
         return data;
     }
     catch (err) {

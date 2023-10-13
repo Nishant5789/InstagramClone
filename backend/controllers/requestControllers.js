@@ -18,7 +18,6 @@ const getRequests = asyncHandler(async (req, res) => {
 //@acsess public 
 const createRequest = asyncHandler(async (req, res) => {
     const CurrUserId = req.user.id;
-
     try {
         console.log("The request body is : ", req.body);
         const { Msg } = req.body;
@@ -44,7 +43,7 @@ const createRequest = asyncHandler(async (req, res) => {
         
         const user1 = await User.findByIdAndUpdate(req.params.ReceiverId,
             {
-                $push: { Request: request1._id }, // Add the new postid to the AllPost array
+                $push: { Request: request1._id }, // 
             },
             { new: true }
         );
@@ -131,6 +130,54 @@ const updateRequest = asyncHandler(async (req, res) => {
     }
 });
 
+const handleFollowRequest = asyncHandler(async (req, res) => {
+    const CurrUserId = req.user.id;
+    try {
+        // console.log("The request body is : ", req.body);
+        const { Msg } = req.body;
+        // console.log(CurrUserId);
+        // console.log(req.params.ReceiverId);
+
+        const alternateRequest = await Request.findOne({
+            RequestSenderUser: req.params.ReceiverId,
+            RequestReceiverUser: CurrUserId
+        });
+        console.log(alternateRequest);
+        const updateValues = {
+            IsFollowback: true
+        }
+        await Request.findByIdAndUpdate(alternateRequest._id, { ...updateValues });
+
+        const request = await Request.create({
+            RequestSenderUser: CurrUserId ,
+            RequestReceiverUser: req.params.ReceiverId,
+            IsFollowback: true,
+            StatusRequest: "Pending",
+            Msg: Msg,
+        });
+        
+        const curruser = await User.findByIdAndUpdate(req.params.ReceiverId,
+            {
+                $push: { Request: request._id },  
+            },
+            { new: true }
+        );
+        res.status(201).json(request);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({msg: error});
+    }
+});
+
+const handleUnFollowRequest = asyncHandler(async (req, res) => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({msg: error});
+    }
+});
 
 
-module.exports = { getRequests, createRequest, updateRequest };
+
+module.exports = { getRequests, createRequest, updateRequest, handleFollowRequest };
