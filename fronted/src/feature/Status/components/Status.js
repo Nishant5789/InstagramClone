@@ -20,28 +20,32 @@ const Status = () => {
     }
 
     useEffect(() => {
-        dispatch(fetchAllStoryOnHomePageAsync());
+        setTimeout(() => {
+            dispatch(fetchAllStoryOnHomePageAsync());
+        }, 2000);
     },[])
 
     return (
         <>
-            <div className='flex  sm:mx-8 z-0 border-b-2  items-center overflow-hidden overflow-x-scroll sm:gap-x-4 gap-x-6 pt-4 pb-2 sm:px-0 px-4'>
+            <div className='flex  sm:mx-8 z-0 border-b-2  items-center overflow-hidden overflow-x-scroll sm:gap-x-4 gap-x-6 pt-4 pb-4 sm:px-0 px-4'>
                 {CurrLoggedUserStatus === null ? <div onClick={() => SetIsopenploadStatus(!isOpenUploadStatus)}
                     className='sm:w-20 ml-2 sm:h-24 w-16 h-20 flex-col items-center justify-center'>
                     <img src={AddLogo} className=' object-contain ring-2  p-1 ring-pink-700 rounded-full' alt="" />
                     <h1 className='text-center font-semibold'>Upload</h1>
                 </div> : null}
+                <div className='flex items-center gap-x-4'>
                 {
                     StoryData && StoryData.map(({StoryPath, User},index)=>{
                         return (
-                        <div onClick={()=>handleStatusModal(index)}
-                         className='sm:w-20 sm:h-24 w-20 h-20 flex-col items-center justify-center'>
-                            <img src={StoryPath} className='object-fill  ring-2  p-1 ring-pink-700 rounded-full' alt="" />
+                            <div onClick={()=>handleStatusModal(index)}
+                            className='w-32 object-cover  flex-col items-center justify-center'>
+                            <img src={StoryPath} className='rounded-full' alt="" />
                             <h1 className='text-center font-semibold'>{User.UserName}</h1>
                         </div>
                         )
                     })
                 }  
+                </div>
             </div>
             { isOpenStatusModal && <StatusModal selectedStatusModalNumber={selectedStatusModalNumber} SetSelectedStatusModalNumber={SetSelectedStatusModalNumber}  SetIsOpenStatusModal={SetIsOpenStatusModal}/>  }
             {  isOpenUploadStatus && <StatusUploadModal SetIsopenploadStatus={SetIsopenploadStatus} />}

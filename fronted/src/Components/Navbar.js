@@ -89,7 +89,7 @@ const Navbar = () => {
           <h1 className='font-bold hidden lg:block'>Create</h1>
         </li>
         </Link>
-        <Link to="/Profile">
+        <Link to="/SelfProfile">
         <li className='flex hover:bg-gray-200  rounded-xl  mx-2 py-2 lg:px-4 justify-center  lg:justify-normal items-center gap-x-4'>
           <img src={Sampleavatar} className='w-10 h-10 ' alt="" />
           <h1 className='font-bold hidden lg:block'>Profile</h1>

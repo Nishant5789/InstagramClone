@@ -10,7 +10,12 @@ const Comment = require("../models/commentModel");
 //@acsess public 
 const getPosts = asyncHandler(async (req, res) => {
     const CurrUserId = req.user.id;
-    const posts = await Post.find({ UserId: CurrUserId }).populate(
+
+    const CurrUser = await User.findById(CurrUserId);
+    // console.log(CurrUser);
+    const FollowingUser = CurrUser.FollowingUser;
+
+    const posts = await Post.find({ UserId:  { $in: FollowingUser }  }).populate(
         {
             path: 'Comment',
             populate: {
@@ -19,6 +24,7 @@ const getPosts = asyncHandler(async (req, res) => {
         }
     ).populate("UserId").sort({createdAt:-1});
 
+    // console.log(posts);
     res.status(200).json(posts);
 });
 

@@ -65,7 +65,7 @@ const Login = () => {
       dispatch(fetchUserIdAsync());
     }, 1000);
   };
-
+  
   return (
     <>
     {CurrLoggedUserId && <Navigate to="/" replace={true}/>}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import StatusPic from '../../../assets/icons/nushrat.jpg'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserDetailAsync, selectCurrUserProfileDetail, selectLoggedInUserId } from '../ProfileSlice'
-import { HandleSendRequestAsync } from '../../Notification/notificationSlice'
+import { HandleFolowbackRequestAsync, HandleModifyRequestAsync, HandleSendRequestAsync } from '../../Notification/notificationSlice'
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,6 @@ const Profile = () => {
 
   let CurrUserProfile = { UserName: "", FirstName: "", LastName: "", ProfilePhoto: "", AllPost: [], Bio: "", FollowingUser: [], Request: [], FollowersUser: [], UserID: "" };
 
-
   const handleButton = () => {
     if (ChooseButton === "Send Request") {
       dispatch(HandleSendRequestAsync({
@@ -21,52 +20,61 @@ const Profile = () => {
       }));
       setTimeout(() => dispatch(fetchUserDetailAsync(CurrUserProfile.UserID)), 1000);
     }
-  }
-
-  useEffect(()=>{
-    if(ProfileData.hasOwnProperty("UserName")){
-      for (let key in ProfileData) {
-        if (ProfileData.hasOwnProperty(key)) {
-          CurrUserProfile[key] = [key];
-        }
-        CurrUserProfile["UserID"]=ProfileData.id;
-      }
+    else if(ChooseButton === "Follow Back"){
+      dispatch(HandleFolowbackRequestAsync({
+        ReceiverId: CurrUserProfile.UserID,
+        Msg: `${CurrLoggedUserId} requested to follow you`
+      }));
+      setTimeout(() => dispatch(fetchUserDetailAsync(CurrUserProfile.UserID)), 1000);
     }
-  }, [ProfileData]);
+  }
 
   useEffect(() => {
     let RequestedUser = [];
-    // console.log(Request);
-    if (Request !== undefined) {
-      RequestedUser = Request.map((Req) => {
+    if (ProfileData) {
+      for (let key in ProfileData) {
+        if (ProfileData.hasOwnProperty(key)) {
+          CurrUserProfile[key] = ProfileData[key];
+        }
+        CurrUserProfile["UserID"] = ProfileData.id;
+      }
+      RequestedUser = CurrUserProfile.Request.map((Req) => {
         return Req.RequestSenderUser;
       })
-    }
 
-    const IsFollowing = CurrUserProfile.FollowingUser && CurrUserProfile.FollowingUser.includes(CurrLoggedUserId);
-    const IsFollower = CurrUserProfile.FollowersUser && CurrUserProfile.FollowersUser.includes(CurrLoggedUserId);
-    const IsRequestedUser = RequestedUser && RequestedUser.includes(CurrLoggedUserId);
+      // console.log(CurrUserProfile.Request);
+
+      const IsFollowing = CurrUserProfile.FollowingUser && CurrUserProfile.FollowingUser.includes(CurrLoggedUserId);
+      const IsFollower = CurrUserProfile.FollowersUser && CurrUserProfile.FollowersUser.includes(CurrLoggedUserId);
+      const IsRequestedUser = RequestedUser.includes(CurrLoggedUserId);
 
 
-    // console.log({IsFollower,IsFollowing,  IsRequestedUser});
-    if (IsRequestedUser) {
-      setButton("Pending");
+      // console.log({IsFollower,IsFollowing,  IsRequestedUser});
+      if (IsRequestedUser) {
+        setButton("Pending");
+      }
+      if (IsFollower && IsFollowing) {
+        setButton("Following");
+      }
+      else if (IsFollowing && !IsFollower) {
+        setButton("Follow Back");
+      }
+      else if (!IsFollowing && IsFollower) {
+        setButton("Following");
+      }
+
     }
-    if (IsFollower && IsFollowing) {
-      setButton("Following");
-    }
-    else if (IsFollowing && !IsFollower) {
-      setButton("Follow Back");
-    }
-  }, [CurrUserProfile.FollowingUser, CurrUserProfile.FollowersUser, CurrUserProfile.Request])
+  }, [ProfileData]);
+
+
 
   return (
     <div className='grid grid-rows-6 min-h-screen max-w-4xl mx-auto  border-2 '>
       <div className='row-span-2  grid  grid-cols-1  border-2'>
         <div className='p-4 flex items-center'>
-          <img src={ProfileData.hasOwnProperty["ProfilePhoto"] && ProfileData.ProfilePhoto} className='w-16 h-16 rounded-full' alt="" />
+          <img src={ProfileData && ProfileData.hasOwnProperty["ProfilePhoto"] && ProfileData.ProfilePhoto} className='w-16 h-16 rounded-full' alt="" />
           <div className='p-2'>
-            <h1 className='text-xl font-bold'>{ProfileData.hasOwnProperty["UserName"] && ProfileData.UserName}</h1>
+            <h1 className='text-xl font-bold'>{ProfileData && ProfileData.hasOwnProperty["UserName"] && ProfileData.UserName}</h1>
             <ul className='flex gap-x-2'>
               <li onClick={handleButton} className='px-2 py-2 bg-purple-600 active:bg-purple-400 text-white rounded-md'>{ChooseButton}</li>
               {ChooseButton === "Following" && <li className='px-2 py-2 bg-red-600 active:bg-red-500 text-white rounded-md'>UnFollow</li>}
@@ -74,9 +82,9 @@ const Profile = () => {
           </div>
         </div>
         <div className='border-2 space-y   row-span-4  p-2'>
-          <h1 className='font-bold'>{ProfileData.hasOwnProperty["FirstName"] && ProfileData.FirstName} {ProfileData.hasOwnProperty["LastName"] && ProfileData.LastName}</h1>
+          <h1 className='font-bold'>{ProfileData && ProfileData.hasOwnProperty["FirstName"] && ProfileData.FirstName} {ProfileData && ProfileData.hasOwnProperty["LastName"] && ProfileData.LastName}</h1>
           <p className='p-2'>
-            {ProfileData.hasOwnProperty["Bio"] && ProfileData.Bio}
+            {ProfileData && ProfileData.hasOwnProperty["Bio"] && ProfileData.Bio}
           </p>
           <p className='text-sm font-mono'>
             Followed by saloni desai
@@ -91,7 +99,7 @@ const Profile = () => {
         </ul>
         <div className='grid grid-cols-3 p-2 place-items-center gap-4 '>
           {
-            ProfileData.hasOwnProperty["AllPost"] && ProfileData.AllPost.map(({ PostType, Comment, Caption, PostPath, UserId, LikedByUsers, TotalLikes, id: postID }) => {
+            ProfileData && ProfileData.hasOwnProperty["AllPost"] && ProfileData.AllPost.map(({ PostType, Comment, Caption, PostPath, UserId, LikedByUsers, TotalLikes, id: postID }) => {
               return (
                 <div className='w-28 h-28 md:h-48 md:w-48 border-2'>
                   <img src={PostPath} className='object-cover' alt="" />

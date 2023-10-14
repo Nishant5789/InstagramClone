@@ -25,10 +25,10 @@ const Search = () => {
     <>
       <div className="flex">
         <div className='relative flex items-center justify-center w-full'>
-          <img src={SearchIcon} className='w-5 h-5 absolute left-14 top-4 inset-0' alt="" />
+          {/* <img src={SearchIcon} className='w-5 h-5 absolute left-14 top-4 inset-0' alt="" /> */}
           <input
             type="search"
-            className="p-4 pl-10 w-3/4 text-sm text-gray-900 bg-gray-50 rounded-lg border outline-none border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
+            className="p-4 pl-4 w-3/4 text-sm text-gray-900 bg-gray-50 rounded-lg border outline-none border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
             placeholder="Search"
             onChange={(e) => setSearchdata(e.target.value)}
           />

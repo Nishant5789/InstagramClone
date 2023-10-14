@@ -12,6 +12,6 @@ export function handleChangeProfilePic() {
     return axios.get(`http://dummy/api/`);
 }
 
-export function handleModifyProfile() {
-    return axios.get(`http://dummy/api/`);
+export function handleModifyProfile(updateDetail) {
+    return axios.put(`http://localhost:8080/api/user`, updateDetail);
 }

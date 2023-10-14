@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 const Post = require("../models/postModel");
-const { post } = require("../routes/postRoutes");
 const User = require("../models/userModel");
 const Comment = require("../models/commentModel");
 const Chat = require("../models/chatModel");
@@ -28,8 +27,25 @@ const addChatMessage = asyncHandler( async (req,res) => {
     
 });
 
+//@dec get a chat
+//@route GET /api/chat/:Chatid
+//@acsess public
+const getchat = asyncHandler( async (req,res) => {
+
+    try{
+        console.log(req.params.chatId);
+        const chat = await Chat.find({ChatId:req.params.chatId});
+
+        res.status(200).json(chat);
+    }
+    catch(error){
+        console.log(error);
+    }
+});
+
 const getAllUserChats = asyncHandler( async (req,res) => {
     const CurrUserId = req.user.id;
+    // console.log(CurrUserId);
     try {
         const CurrUser = await User.findById(CurrUserId).populate("FollowingUser").populate("FollowersUser");
     
@@ -57,30 +73,13 @@ const getAllUserChats = asyncHandler( async (req,res) => {
               FilterUserChatsData.push(obj);
             }
           }
-          
-
         res.status(200).json(FilterUserChatsData);
     } catch (error) {
         console.log(error);
         res.status(404).json(error);
     }
-    
 });
 
-//@dec get a chat
-//@route GET /api/chat/:Chatid
-//@acsess public
-const getchat = asyncHandler( async (req,res) => {
 
-    try{
-        console.log(req.params.chatId);
-        const chat = await Chat.find({ChatId:req.params.chatId});
 
-        res.status(200).json(chat);
-    }
-    catch(error){
-        console.log(error);
-    }
-});
-
-module.exports = {addChatMessage,getchat, getAllUserChats};
+module.exports = {addChatMessage, getchat, getAllUserChats};
